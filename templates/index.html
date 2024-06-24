@@ -1,4 +1,13 @@
 <body>
-    <h2>HI</h2>
-    <p>This is a test</p>
+    <script>
+        window.onload = function() {
+            fetch("/test_get").then((resp)=>{
+                resp.text().then((text)=>{
+                    document.getElementById("replace").innerHTML = text;
+                })
+            })
+        }
+    </script>
+    <h2>%uniqueTextToBeReplaced%%</h2>
+    <p id="replace">This is a test</p>
 </body>
