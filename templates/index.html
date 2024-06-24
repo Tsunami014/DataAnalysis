@@ -1,31 +1,8 @@
 <head>
     <script src="{{url_for('static', filename='BG_Anxiety.js')}}"></script>
-    <script>
-        window.onload = function() {
-            const canvas = document.getElementById("game_canvas");
-            const bg = new BG_Anxiety([canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().height], true);
-            const ctx = canvas.getContext("2d");
-            function tick() {
-                bg.size = [canvas.getBoundingClientRect().width, canvas.getBoundingClientRect().height];
-                bg.update(0.1);
-                bg.draw(ctx);
-            }
-            setInterval(tick, 100);
-        }
-    </script>
-    <style>
-        #game_canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-        }
-        body * {
-            position: relative;
-            z-index: 1;
-        }
-    </style>
+    <script src="{{url_for('static', filename='main.js')}}"></script>
+    <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
+    <title>Data Analysis</title>
 </head>
 <canvas id="game_canvas"></canvas>
 <body>
