@@ -31,3 +31,14 @@ body * {
     margin-left: calc(0px - var(--width ) / 2);
     margin-top:  calc(0px - var(--height) / 2);
 }
+
+#topRight {
+    top: 5px;
+    right: 10px;
+    position: absolute;
+}
+
+.together {
+    display: flex;
+    align-items: center;
+}
