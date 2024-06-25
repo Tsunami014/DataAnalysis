@@ -8,14 +8,14 @@
 <canvas id="game_canvas"></canvas>
 <body>
     <div id="topRight">
-        <p style="margin-bottom: 1px; margin-top: 5px;">Theme:</p>
+        <p class="unselectable" style="margin-bottom: 1px; margin-top: 5px;">Theme:</p>
         <div class="together">
-            <p>Dark  </p>
+            <p class="unselectable">Dark  </p>
             <label class="switch" id="ThemeSwitch">
                 <input id="themeSwitch" type="checkbox" onclick="changeTheme(this.checked);">
                 <span class="slider round"></span>
             </label>
-            <p>  Light</p>
+            <p class="unselectable">  Light</p>
         </div>
     </div>
     <div id="centreSection">
