@@ -1,3 +1,5 @@
+/*Switch code borrowed off of https://www.w3schools.com/howto/howto_css_switch.asp */
+
 /* The switch - the box around the slider */
 .switch {
     position: relative;
@@ -21,7 +23,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: #ccc;
+    background-color: seagreen;
     -webkit-transition: .4s;
     transition: .4s;
 }
@@ -39,11 +41,11 @@
 }
 
 input:checked + .slider {
-    background-color: #2196F3;
+    background-color: skyblue;
 }
 
 input:focus + .slider {
-    box-shadow: 0 0 1px #2196F3;
+    box-shadow: 0 0 1px skyblue;
 }
 
 input:checked + .slider:before {
