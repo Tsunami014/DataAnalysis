@@ -3,6 +3,10 @@ from asyncro import wrapper, statuses
 
 app = flask.Flask(__name__)
 
+@app.route('/favicon.ico')
+def favicon():
+    return flask.url_for('static', filename='favicon.ico')
+
 @wrapper
 def long_task(update):
     import time, random
