@@ -17,14 +17,19 @@ files = {
 def isCached():
     return {i: os.path.exists('./cache/'+i) for i in files.keys()}
 
+def cached_status(cache=True, force=False):
+    allcached = isCached()
+    cacheds = ([] if (not cache) or force else [i for i in allcached if allcached[i]])
+    fullyCached = len(cacheds) == len(allcached)
+    return ('<b>Force redownloading all cached</b>' if force else (
+    f'Fully cached all {len(allcached)} file{"s" if len(allcached) != 1 else ""}' if fullyCached else (
+        f'{len(cacheds)} file{"s" if len(cacheds) != 1 else ""} cached out of {len(allcached)}' if len(cacheds) > 0 else 'Not cached'
+)))+f". Will download {str(len(allcached)-len(cacheds))} file{'s' if len(allcached)-len(cacheds) != 1 else ''} and will {'<i><u>not</u></i> ' if not cache else ''}cache them once downloaded.\n"
+
 def getFiles(cache=True, force=False):
     allcached = isCached()
     cacheds = ([] if (not cache) or force else [i for i in allcached if allcached[i]])
     fullyCached = len(cacheds) == len(allcached)
-    yield "Caching status: "+('Force redownloading all cached' if force else (
-    f'Fully cached all {len(allcached)} file{"s" if len(allcached) != 1 else ""}' if fullyCached else (
-        f'{len(cacheds)} file{"s" if len(cacheds) != 1 else ""} cached out of {len(allcached)}' if len(cacheds) > 0 else 'Not cached'
-)))+f". Will download {str(len(allcached)-len(cacheds))} file{'s' if len(allcached)-len(cacheds) != 1 else ''} and will {'not ' if not cache else ''}cache them once downloaded.\n", False
     if fullyCached:
         yield "Cache has all the files! Using them.", False
         yield {i: i for i in cacheds}, True

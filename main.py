@@ -1,5 +1,6 @@
 import flask
 from asyncro import wrapper, statuses
+from getWeather import cached_status
 
 app = flask.Flask(__name__)
 
@@ -46,6 +47,18 @@ def read_form(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-
   
     ## Return the extracted information
     return data
+
+@app.route('/cache_opts', methods=['POST'])
+def cache_opts(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
+    # Get the form data as Python ImmutableDict datatype
+    data = flask.request.form
+  
+    ## Return the extracted information
+    return data
+
+@app.route('/cache_status')
+def cache_status():
+    return cached_status(flask.request.args.get('cache') == 'true', flask.request.args.get('force') == 'true')
 
 @app.route('/')
 def main():
