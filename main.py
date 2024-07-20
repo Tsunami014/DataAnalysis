@@ -109,11 +109,30 @@ def get_names():
 @app.route('/get_data/<type>/<station>')
 def get_data(type, station):
     if type == 'Rain':
-        return flask.jsonify(files['Rain'][0](int(station)))
+        return flask.jsonify(files['Rain'][0][int(station)])
     elif type == 'Temps':
-        return flask.jsonify(files['Temps'][0](int(station)))
+        return flask.jsonify(files['Temps'][0][station])
     else:
         return flask.jsonify({'ERROR': 'Invalid type'}), 404
+
+@app.route('/plot/<type>/<station>')
+def plot(type, station):
+    from bokeh.plotting import figure
+    from bokeh.embed import json_item
+    import json
+    if type == 'Rain':
+        dat = files['Rain'][0][int(station)]
+        p = figure(title=f"Rainfall in {files['Rain'][1][int(station)]} ({station})", x_axis_label='Date', x_axis_type="datetime", y_axis_label='Rainfall (mm)')
+        p.line(dat['Date'], dat['Rainfall'], legend_label="Rainfall (mm)", line_width=2, line_color="blue")
+    elif type == 'Temps':
+        dat = files['Temps'][0][station]
+        p = figure(title=f"Temperatures in {files['Temps'][1](int(station))['Name']}, {files['Temps'][1](int(station))['State']} ({station})", x_axis_label='Date', x_axis_type="datetime", y_axis_label='Temperature (°C)')
+        p.line(dat['Date'], dat['MaxTemp'], legend_label="Max Temp (°C)", line_width=2, line_color="red")
+        p.line(dat['Date'], dat['MinTemp'], legend_label="Min Temp (°C)", line_width=2, line_color="blue")
+    else:
+        return flask.jsonify({'ERROR': 'Invalid type'}), 404
+    
+    return json.dumps(json_item(p, "myplot"))
 
 @app.route('/')
 def main():

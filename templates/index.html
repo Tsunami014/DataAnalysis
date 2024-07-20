@@ -4,14 +4,14 @@
     <script src="{{url_for('static', filename='main.js')}}"></script>
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='switch.css')}}">
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-3.5.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-gl-3.5.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.5.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.5.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-mathjax-3.5.0.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-api-3.5.0.min.js"></script>
     <title>Data Analysis</title>
     <link rel='shortcut icon' href="{{url_for('static', filename='favicon.ico')}}" type='image/x-icon'/ >
-    <script type=text/javascript>
-        if ({{ files }}) {
-            document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILE STORAGE IN PROGRESS";
-            file_status_check();
-        }
-    </script>
     <style id="StoredStyle">
         #IfStored {
             display: none;
@@ -58,10 +58,17 @@
             <br><br><br><br><br><br><br>
             <form>
                 <label for="select" class="form-label">Pick a graph to show</label>
-                <select id="graphSelect" name="cars" onchange="alert(this.value);"></select>
+                <select id="graphSelect" name="cars" onchange="graph(this.value);"></select>
             </form>
             <br>
             <!--img src='data:image/png;base64,{{data}}' onerror="this.style.display='none'"/-->
         </div>
+        <div id="myplot"></div>
     </div>
+    <script type=text/javascript>
+        if ({{ files }}) {
+            document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILE STORAGE IN PROGRESS";
+            file_status_check();
+        }
+    </script>
 </body>

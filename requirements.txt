@@ -1,2 +1,4 @@
 flask
 ipywidgets
+bookeh
+matplotlib
