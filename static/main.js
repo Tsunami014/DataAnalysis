@@ -2,10 +2,14 @@ function onload() {
     document.getElementById("Cache").checked = true;
     document.getElementById("Force").checked = false;
     updateCacheStatus();
-    var area = document.getElementById('centreSection');
+    load_BG();
+}
+
+function scrollDown() {
     setTimeout(function() {
+        var area = document.getElementById('centreSection');
         area.scrollTop = area.scrollHeight;
-    }, 500);
+    }, 100);
 }
 
 function file_status_check() {
@@ -14,19 +18,36 @@ function file_status_check() {
         data = resp.json().then(function(data) {
             var textarea = document.getElementById('FilesStatus');
             if ('txt' in data) {
-                document.getElementById('FilesStatus').innerHTML += data.txt + "&#13;&#10;";
+                document.getElementById('FilesStatus').innerHTML = data.txt;// + "&#13;&#10;";
                 textarea.scrollTop = textarea.scrollHeight;
             }
             if (data.State != 'FINISHED' && data.state != 'ERROR') {
-                setTimeout(file_status_check, 100);
+                setTimeout(file_status_check, 500);
             } else {
-                document.getElementById('FilesStatus').innerHTML += "Done!";
+                document.getElementById('FilesStatus').innerHTML = "Done!";
                 textarea.scrollTop = textarea.scrollHeight;
-                document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILES STORED :)"
+                document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILES STORED :)";
+                document.getElementById('StoredStyle').innerHTML = "";
+                select = document.getElementById('graphSelect');
+                select.innetHTML = "";
+                fetch('/get_names').then(resp => {
+                    resp.json().then(function(data) {
+                        for (i in data) {
+                            var group = "";
+                            for (j in data[i]) {
+                                group += `<option value="${i}_${j}">${data[i][j]}</option>`
+                            }
+                            select.innerHTML += `<optgroup label="${i}">${group}</optgroup>`
+                        }
+                    });
+                });
+                scrollDown();
             }
         })
     });
 }
+
+
 
 function start_long_task() {
     run_task('longtask', function(data) {

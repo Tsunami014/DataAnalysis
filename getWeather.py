@@ -123,9 +123,9 @@ def CleanTemperatures(tmps, nms):
         df['Date'] = pd.to_datetime(df['Date'], format='%Y%m%d') # Turn the dates into **real** dates!
         df['MaxTemp'] = df['MaxTemp']/10 # Adjust the temperature because of how it was stored
         df['MinTemp'] = df['MinTemp']/10 # Adjust the temperature because of how it was stored
-        return df
+        return df.to_dict('list')
 
-    yield ({i[:6]: clean_data(i) for i in datas}, getInfo), True
+    yield [{i[:6]: clean_data(i) for i in datas}, getInfo], True
 
 def CleanRainfall(rfs):
     dirs = rfs.getnames()
@@ -147,13 +147,13 @@ def CleanRainfall(rfs):
         df = pd.read_csv(StringIO('Date,Rainfall\n'+cleaned))
         df = df.drop(df[df.Rainfall == float(info[3][14:])].index) # Remove all missing data coz it's useless
         df['Date'] = pd.to_datetime(df['Date'], format='%Y%m%d') # Turn the dates into **real** dates!
-        return df, {"Station": int(info[0]), "Name": " ".join(info[4:])}
+        return df.to_dict('list'), {"Station": int(info[0]), "Name": " ".join(info[4:])}
 
-    yield "Cleaning data (may take a short while)...", False
+    yield "Cleaning Rainfall data (may take a short while)...", False
     cleanDatas = {}
     stationMap = {}
     for i in datas:
         df, info = clean_data(datas[i])
         cleanDatas[info['Station']] = df
         stationMap[info['Station']] = info['Name']
-    yield (cleanDatas, stationMap), True
+    yield [cleanDatas, stationMap], True

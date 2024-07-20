@@ -1,6 +1,6 @@
 import flask
 from asyncro import wrapper, statuses
-from getWeather import cached_status, remove_cache, getFiles, extractFiles
+from getWeather import cached_status, remove_cache, getFiles, extractFiles, CleanTemperatures, CleanRainfall
 
 app = flask.Flask(__name__)
 
@@ -60,11 +60,25 @@ def get_files_long(update, cache, force):
         else:
             newfs = resp
             break
+    xtracted = None
     for resp, ret in extractFiles(newfs):
         if not ret:
             update(txt=resp)
         else:
-            files = resp
+            xtracted = resp
+            break
+    for resp, ret in CleanTemperatures(xtracted[0], xtracted[2]):
+        if not ret:
+            update(txt=resp)
+        else:
+            files['Temps'] = resp
+            break
+    for resp, ret in CleanRainfall(xtracted[1]):
+        if not ret:
+            update(txt=resp)
+        else:
+            files['Rain'] = resp
+            break
 
 @app.route('/get_files', methods=['POST'])
 def get_files(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
@@ -86,6 +100,20 @@ def cache_status():
 def delete_cache():
     remove_cache()
     return flask.jsonify({})
+
+@app.route('/get_names')
+def get_names():
+    # Stored as {'StationNumber': 'Name', ...}
+    return flask.jsonify({'Temps': {i: files['Temps'][1](int(i))['Name']+f'({i})' for i in files['Temps'][0]}, 'Rain': files['Rain'][1]})
+
+@app.route('/get_data/<type>/<station>')
+def get_data(type, station):
+    if type == 'Rain':
+        return flask.jsonify(files['Rain'][0](int(station)))
+    elif type == 'Temps':
+        return flask.jsonify(files['Temps'][0](int(station)))
+    else:
+        return flask.jsonify({'ERROR': 'Invalid type'}), 404
 
 @app.route('/')
 def main():

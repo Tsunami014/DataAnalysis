@@ -8,9 +8,15 @@
     <link rel='shortcut icon' href="{{url_for('static', filename='favicon.ico')}}" type='image/x-icon'/ >
     <script type=text/javascript>
         if ({{ files }}) {
+            document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILE STORAGE IN PROGRESS";
             file_status_check();
         }
     </script>
+    <style id="StoredStyle">
+        #IfStored {
+            display: none;
+        }
+    </style>
 </head>
 <canvas id="game_canvas"></canvas>
 <body onload="onload();">
@@ -48,19 +54,14 @@
                 <button type="submit" class="btn btn-primary">Get files</button>
             </fieldset>
         </form>
-        <form action="{{ url_for('read_form')}}" method="post">
-            <label for="email" class="form-label">Email address</label>
-                <select name="cars">
-                    <optgroup label="Swedish Cars">
-                        <option value="volvo">Volvo</option>
-                        <option value="saab">Saab</option>
-                    </optgroup>
-                    <option value="fiat">Fiat</option>
-                    <option value="audi">Audi</option>
-                </select>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
-        <img src='data:image/png;base64,{{data}}' onerror="this.style.display='none'"/>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><p>hi</p>
+        <div id="IfStored">
+            <br><br><br><br><br><br><br>
+            <form>
+                <label for="select" class="form-label">Pick a graph to show</label>
+                <select id="graphSelect" name="cars" onchange="alert(this.value);"></select>
+            </form>
+            <br>
+            <!--img src='data:image/png;base64,{{data}}' onerror="this.style.display='none'"/-->
+        </div>
     </div>
 </body>

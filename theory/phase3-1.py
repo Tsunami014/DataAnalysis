@@ -167,7 +167,7 @@ def clean_data(dat):
     df['Date'] = pd.to_datetime(df['Date'], format='%Y%m%d') # Turn the dates into **real** dates!
     return df, {"Station": int(info[0]), "Name": " ".join(info[4:])}
 
-print("Cleaning data (may take a short while)...")
+print("Cleaning Rainfall data (may take a short while)...")
 cleanDatas = {}
 stationMap = {}
 for i in datas:
