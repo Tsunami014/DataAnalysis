@@ -6,9 +6,14 @@
     <link rel="stylesheet" href="{{url_for('static', filename='switch.css')}}">
     <title>Data Analysis</title>
     <link rel='shortcut icon' href="{{url_for('static', filename='favicon.ico')}}" type='image/x-icon'/ >
+    <script type=text/javascript>
+        if ({{ files }}) {
+            file_status_check();
+        }
+    </script>
 </head>
 <canvas id="game_canvas"></canvas>
-<body>
+<body onload="onload();">
     <div id="topRight">
         <p class="unselectable" style="margin-bottom: 1px; margin-top: 5px;">Theme:</p>
         <div class="together">
@@ -43,14 +48,6 @@
                 <button type="submit" class="btn btn-primary">Get files</button>
             </fieldset>
         </form>
-        <script type=text/javascript>
-            document.getElementById("Cache").checked = true;
-            document.getElementById("Force").checked = false;
-            updateCacheStatus();
-            if ({{ files }}) {
-                file_status_check();
-            }
-        </script>
         <form action="{{ url_for('read_form')}}" method="post">
             <label for="email" class="form-label">Email address</label>
                 <select name="cars">
@@ -64,5 +61,6 @@
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         <img src='data:image/png;base64,{{data}}' onerror="this.style.display='none'"/>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><p>hi</p>
     </div>
 </body>

@@ -1,3 +1,13 @@
+function onload() {
+    document.getElementById("Cache").checked = true;
+    document.getElementById("Force").checked = false;
+    updateCacheStatus();
+    var area = document.getElementById('centreSection');
+    setTimeout(function() {
+        area.scrollTop = area.scrollHeight;
+    }, 500);
+}
+
 function file_status_check() {
     // send GET request to status URL
     fetch("status/get_files").then(resp => {
