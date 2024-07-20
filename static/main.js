@@ -1,3 +1,21 @@
+function file_status_check() {
+    // send GET request to status URL
+    fetch("status/get_files").then(resp => {
+        data = resp.json().then(function(data) {
+            if ('txt' in data) {
+                document.getElementById('FilesStatus').innerHTML = data.txt
+            }
+            if (data.State != 'FINISHED' && data.state != 'ERROR') {
+                // rerun in 1 second
+                setTimeout(file_status_check, 1000);
+            } else {
+                document.getElementById('FilesStatus').innerHTML = "Done!";
+                document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILES STORED :)"
+            }
+        })
+    });
+}
+
 function start_long_task() {
     run_task('longtask', function(data) {
         // update UI

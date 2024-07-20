@@ -36,12 +36,20 @@
                 <label for="button" class="form-label">Delete Cache</label>
                 <input type="button" onclick="DeleteCache();" value="🗑"><br>
             </fieldset>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <fieldset>
+                <legend>Files</legend>
+                <p id="FilesInfo"><b>Status: </b>FILES NOT STORED</p>
+                <p id="FilesStatus"></p>
+                <button type="submit" class="btn btn-primary">Get files</button>
+            </fieldset>
         </form>
         <script type=text/javascript>
             document.getElementById("Cache").checked = true;
             document.getElementById("Force").checked = false;
             updateCacheStatus();
+            if ({{ files }}) {
+                file_status_check();
+            }
         </script>
         <form action="{{ url_for('read_form')}}" method="post">
             <label for="email" class="form-label">Email address</label>

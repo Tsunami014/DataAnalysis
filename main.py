@@ -1,12 +1,14 @@
 import flask
 from asyncro import wrapper, statuses
-from getWeather import cached_status, remove_cache
+from getWeather import cached_status, remove_cache, getFiles
 
 app = flask.Flask(__name__)
 
 @app.route('/favicon.ico')
 def favicon():
     return flask.url_for('static', filename='favicon.ico')
+
+files = {}
 
 @wrapper
 def long_task(update):
@@ -48,14 +50,27 @@ def read_form(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-
     ## Return the extracted information
     return data
 
+@wrapper
+def get_files_long(update, cache, force):
+    global files
+    for resp, ret in getFiles(cache, force):
+        if not ret:
+            update(txt=resp)
+        else:
+            files = resp
+            break
+
 @app.route('/get_files', methods=['POST'])
 def get_files(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
+    global files
     # Get the form data as Python ImmutableDict datatype
     data = {'Cache': 'off', 'Force': 'off'} # Because when it's off, for some reason it does not show in the dict
     data.update(dict(flask.request.form))
+    
+    get_files_long('get_files', data['Cache'] == 'on', data['Force'] == 'on')
   
-    ## Return the extracted information
-    return data
+    ## Return to the main page
+    return flask.redirect('/')
 
 @app.route('/cache_status')
 def cache_status():
@@ -68,6 +83,6 @@ def delete_cache():
 
 @app.route('/')
 def main():
-    return flask.render_template("index.html")
+    return flask.render_template("index.html", files=str('get_files' in statuses).lower())
 
 app.run()
