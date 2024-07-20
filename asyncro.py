@@ -7,8 +7,13 @@ def wrapper(func): # TODO: Better name
         statuses[name] = {"State": 'STARTING'}
         def updatef(**news):
             statuses[name] = news
+            statuses[name].update({"State": 'PROGRESS'})
         def runWhile():
-            ret = func(updatef)
+            try:
+                ret = func(updatef)
+            except Exception as e:
+                statuses[name] = {"State": 'ERROR', "Error": str(e)}
+                return
             statuses[name] = {"State": 'FINISHED'}
             statuses[name].update(ret)
         Thread(target=runWhile, daemon=True).start()

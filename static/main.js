@@ -20,30 +20,43 @@ function changeTheme(newTheme) {
 }
 
 function start_long_task() {
-    // send a POST request to start background job
-    fetch('/longtask',{method: "POST"}).then(request => {
-            update_progress('longtask');
-        });
+    run_task('longtask', function(data) {
+        // update UI
+        percent = parseInt(data.current * 100 / data.total);
+        var elm = document.getElementById('progress');
+        elm.innerHTML = percent + '%';
+        var elm2 = document.getElementById('progressStatus');
+        elm2.innerHTML = data.status;
+        var elm3 = document.getElementById('progressState');
+        elm3.innerHTML = data.State;
+        return true; // continue running
+    });
 }
 
-function update_progress(status_url) {
-    // send GET request to status URL
-    fetch("get_task/"+status_url).then(resp => {
+function run_task(task, update_func) {
+    // Check if task is already running
+    fetch("status/"+task).then(resp => {
         data = resp.json().then(function(data) {
-            // update UI
-            percent = parseInt(data.current * 100 / data.total);
-            var elm = document.getElementById('progress');
-            elm.innerHTML = percent + '%';
-            var elm2 = document.getElementById('progressStatus');
-            elm2.innerHTML = data.status;
-            var elm3 = document.getElementById('progressState');
-            elm3.innerHTML = data.state;
-            if (data.state != 'FINISHED') {
-                // rerun in 1 second
-                setTimeout(function() {
-                    update_progress(status_url);
-                }, 1000);
+            if (data.State == 'FINISHED' || data.State == 'ERROR' || data.State == 'NONEXISTANT') {
+                // send a POST request to start background job
+                fetch('/'+task,{method: "POST"}).then(request => {
+                    var upd = function() {
+                        // send GET request to status URL
+                        fetch("status/"+task).then(resp => {
+                            data = resp.json().then(function(data) {
+                                var cont = update_func(data);
+                                if (cont && data.State != 'FINISHED' && data.state != 'ERROR') {
+                                    // rerun in 1 second
+                                    setTimeout(upd, 1000);
+                                }
+                            })
+                        });
+                    };
+                    upd();
+                });
+            } else {
+                alert('The task is already running');
             }
-        })
+        });
     });
 }
