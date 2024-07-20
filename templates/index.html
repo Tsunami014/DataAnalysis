@@ -29,11 +29,13 @@
             <label for="checkbox" class="form-label">NOTE: It will still use already cached files unless you use force refresh. The Cache option is for if you download something; should it be cached.</label><br>
             <input type="checkbox" id="Cache" name="Cache" oninput="updateCacheStatus();">Cache?</input><br>
             <input type="checkbox" id="Force" name="Force" oninput="updateCacheStatus();">Force refresh cache?</input><br>
-            <p id="CacheStatus"></p><button type="button" onclick="updateCacheStatus();">Refresh Cache Status</button><br>
+            <p id="CacheStatus"></p>
+            <button type="button" onclick="updateCacheStatus();">Refresh Cache Status</button>
+            <input type="button" onclick="DeleteCache();">Delete cache</input><br>
             <button type="submit" class="btn btn-primary">Submit</button>
         </form>
         <script type=text/javascript>
-            document.getElementById("Cache").checked = false;
+            document.getElementById("Cache").checked = true;
             document.getElementById("Force").checked = false;
             updateCacheStatus();
         </script>

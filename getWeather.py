@@ -1,6 +1,6 @@
 # phase3-1.py optimized for import
 
-import ftplib, io, os, re
+import ftplib, io, os, re, shutil
 import zipfile, tarfile
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -15,11 +15,15 @@ files = {
 }
 
 def isCached():
-    return {i: os.path.exists('./cache/'+i) for i in files.keys()}
+    return {i: os.path.exists('./theory/cache/'+i) for i in files.keys()}
+
+def remove_cache():
+    shutil.rmtree('./theory/cache')
+    os.mkdir('./theory/cache')
 
 def cached_status(cache=True, force=False):
     allcached = isCached()
-    cacheds = ([] if (not cache) or force else [i for i in allcached if allcached[i]])
+    cacheds = ([] if force else [i for i in allcached if allcached[i]])
     fullyCached = len(cacheds) == len(allcached)
     return ('<b>Force redownloading all cached</b>' if force else (
     f'Fully cached all {len(allcached)} file{"s" if len(allcached) != 1 else ""}' if fullyCached else (
@@ -50,7 +54,7 @@ def getFiles(cache=True, force=False):
         fs[i] = newf
         if cache:
             yield f"Caching file '{i}'...", False
-            with open(f'./cache/{i}', 'wb') as f:
+            with open(f'./theory/cache/{i}', 'wb') as f:
                 f.write(newf.getvalue())
     yield "Quitting server connection...", False
     server.quit()
@@ -62,14 +66,14 @@ def extractFiles(fs):
         if i.endswith('.txt'):
             yield f"Opening text file '{i}'...", False
             if isinstance(fs[i], str):
-                extracted.append(open(f'./cache/{fs[i]}').read())
+                extracted.append(open(f'./theory/cache/{fs[i]}').read())
             else:
                 extracted.append(fs[i].getvalue().decode())
             continue
         typ = 'tar' if i.endswith('.tar') else 'zip'
         if isinstance(fs[i], str):
             yield f"Extracting cached {typ} file '{i}'...", False
-            fs[i] = f'./cache/{fs[i]}'
+            fs[i] = f'./theory/cache/{fs[i]}'
         else:
             yield f"Extracting downloaded {typ} file '{i}'...", False
         if i.endswith('.tar'):

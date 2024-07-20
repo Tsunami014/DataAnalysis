@@ -20,3 +20,9 @@ function updateCacheStatus() {
         });
     });
 }
+
+function DeleteCache() {
+    if(confirm('Are you sure you want to delete the cache?')) {
+        fetch("delete_cache").then(resp => {updateCacheStatus();})
+    }
+}

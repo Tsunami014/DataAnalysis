@@ -1,6 +1,6 @@
 import flask
 from asyncro import wrapper, statuses
-from getWeather import cached_status
+from getWeather import cached_status, remove_cache
 
 app = flask.Flask(__name__)
 
@@ -59,6 +59,11 @@ def cache_opts(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms
 @app.route('/cache_status')
 def cache_status():
     return cached_status(flask.request.args.get('cache') == 'true', flask.request.args.get('force') == 'true')
+
+@app.route('/delete_cache')
+def delete_cache():
+    remove_cache()
+    return flask.jsonify({})
 
 @app.route('/')
 def main():
