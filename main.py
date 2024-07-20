@@ -13,7 +13,7 @@ def long_task(update):
     """Background task that runs a long function with progress reports."""
     verb = ['Starting up', 'Booting', 'Repairing', 'Loading', 'Checking', 'Preparing', 'Cleaning']
     adjective = ['master', 'radiant', 'silent', 'harmonic', 'fast', 'red', 'quick', 'silly']
-    noun = ['solar array', 'particle reshaper', 'cosmic ray', 'orbiter', 'bit', 'bob', 'fire brigade', 'space station']
+    noun = ['solar array', 'particle reshaper', 'cosmic ray', 'orbiter', 'bit', 'fire brigade', 'space station']
     message = ''
     total = random.randint(10, 50)
     for i in range(total):
