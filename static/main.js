@@ -2,14 +2,16 @@ function file_status_check() {
     // send GET request to status URL
     fetch("status/get_files").then(resp => {
         data = resp.json().then(function(data) {
+            var textarea = document.getElementById('FilesStatus');
             if ('txt' in data) {
-                document.getElementById('FilesStatus').innerHTML = data.txt
+                document.getElementById('FilesStatus').innerHTML += data.txt + "&#13;&#10;";
+                textarea.scrollTop = textarea.scrollHeight;
             }
             if (data.State != 'FINISHED' && data.state != 'ERROR') {
-                // rerun in 1 second
-                setTimeout(file_status_check, 1000);
+                setTimeout(file_status_check, 100);
             } else {
-                document.getElementById('FilesStatus').innerHTML = "Done!";
+                document.getElementById('FilesStatus').innerHTML += "Done!";
+                textarea.scrollTop = textarea.scrollHeight;
                 document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILES STORED :)"
             }
         })

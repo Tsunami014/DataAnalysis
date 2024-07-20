@@ -1,6 +1,6 @@
 import flask
 from asyncro import wrapper, statuses
-from getWeather import cached_status, remove_cache, getFiles
+from getWeather import cached_status, remove_cache, getFiles, extractFiles
 
 app = flask.Flask(__name__)
 
@@ -53,12 +53,18 @@ def read_form(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-
 @wrapper
 def get_files_long(update, cache, force):
     global files
+    newfs = None
     for resp, ret in getFiles(cache, force):
         if not ret:
             update(txt=resp)
         else:
-            files = resp
+            newfs = resp
             break
+    for resp, ret in extractFiles(newfs):
+        if not ret:
+            update(txt=resp)
+        else:
+            files = resp
 
 @app.route('/get_files', methods=['POST'])
 def get_files(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
