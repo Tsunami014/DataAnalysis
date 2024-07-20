@@ -48,8 +48,8 @@ def read_form(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-
     ## Return the extracted information
     return data
 
-@app.route('/cache_opts', methods=['POST'])
-def cache_opts(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
+@app.route('/get_files', methods=['POST'])
+def get_files(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
     # Get the form data as Python ImmutableDict datatype
     data = flask.request.form
   

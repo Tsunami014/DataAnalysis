@@ -16,7 +16,7 @@ function updateCacheStatus() {
     fetch("cache_status?cache="+document.getElementById("Cache").checked.toString()+"&force="+document.getElementById("Force").checked.toString()).then(resp => {
         data = resp.text().then(function(data) {
             var elm = document.getElementById('CacheStatus');
-            elm.innerHTML = "<h3>Cache Status:</h3><br>" + data;
+            elm.innerHTML = "<h3 style='display: inline'>Cache Status:</h3><br>" + data;
         });
     });
 }
