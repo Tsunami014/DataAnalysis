@@ -51,7 +51,8 @@ def read_form(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-
 @app.route('/get_files', methods=['POST'])
 def get_files(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
     # Get the form data as Python ImmutableDict datatype
-    data = flask.request.form
+    data = {'Cache': 'off', 'Force': 'off'} # Because when it's off, for some reason it does not show in the dict
+    data.update(dict(flask.request.form))
   
     ## Return the extracted information
     return data
