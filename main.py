@@ -1,6 +1,15 @@
-import flask
+import flask, json
 from asyncro import wrapper, statuses
-from getWeather import cached_status, remove_cache, getFiles, extractFiles, CleanTemperatures, CleanRainfall
+from bokeh.embed import json_item
+from getWeather import (
+    cached_status, 
+    remove_cache, 
+    getFiles, 
+    extractFiles, 
+    CleanTemperatures, 
+    CleanRainfall, 
+    getAllNames
+)
 
 app = flask.Flask(__name__)
 
@@ -66,7 +75,9 @@ def get_files_long(update, cache, force):
             update(txt=resp)
         else:
             xtracted = resp
+            files['Xtracted'] = resp
             break
+    files['Stations'] = xtracted[2]
     for resp, ret in CleanTemperatures(xtracted[0], xtracted[2]):
         if not ret:
             update(txt=resp)
@@ -106,6 +117,34 @@ def get_names():
     # Stored as {'StationNumber': 'Name', ...}
     return flask.jsonify({'Temps': {i: files['Temps'][1](int(i))['Name']+f'({i})' for i in files['Temps'][0]}, 'Rain': files['Rain'][1]})
 
+@app.route('/plot_name_map')
+def plot_name_map():
+    from numpy import pi, tan, log
+    from bokeh.plotting import figure
+    from bokeh.models import ColumnDataSource, HoverTool
+    locs = getAllNames(files['Xtracted'][1], files['Stations'])
+    # range bounds supplied in web mercator coordinates
+    xoff, yoff = 12750000, -6250000
+    p = figure(x_range=(xoff, 4000000+xoff), y_range=(yoff, 6000000+yoff),
+            x_axis_type="mercator", y_axis_type="mercator")
+
+    # Thanks to https://stackoverflow.com/questions/57051517/cant-plot-dots-over-tile-on-bokeh !!!
+    k = 6378137
+    locs['x'] = locs['Long'] * (k * pi/180.0)
+    locs['y'] = log(tan((90 + locs['Lat']) * pi/360.0)) * k
+
+    source = ColumnDataSource(locs)
+
+    p.scatter('x', 'y', source=source, size=5, fill_color="blue", fill_alpha=0.8)
+
+    # Add hover tool
+    hover = HoverTool(tooltips=[("Location number", "@Location"), ("Name", "@Name"), ("State", "@State")])
+    p.add_tools(hover)
+
+    p.add_tile("CartoDB Positron")
+
+    return json.dumps(json_item(p, "LocationsPlot"))
+
 @app.route('/get_data/<type>/<station>')
 def get_data(type, station):
     if type == 'Rain':
@@ -118,8 +157,6 @@ def get_data(type, station):
 @app.route('/plot/<type>/<station>')
 def plot(type, station):
     from bokeh.plotting import figure
-    from bokeh.embed import json_item
-    import json
     if type == 'Rain':
         dat = files['Rain'][0][int(station)]
         p = figure(title=f"Rainfall in {files['Rain'][1][int(station)]} ({station})", x_axis_label='Date', x_axis_type="datetime", y_axis_label='Rainfall (mm)')

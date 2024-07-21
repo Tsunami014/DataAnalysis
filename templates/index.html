@@ -53,12 +53,13 @@
             <br>
             <form>
                 <label for="select" class="form-label">Pick a graph to show</label>
-                <select id="graphSelect" name="cars" onchange="graph(this.value);"></select>
+                <select id="graphSelect" name="location" onchange="graph(this.value);"></select>
             </form>
             <br>
             <!--img src='data:image/png;base64,{{data}}' onerror="this.style.display='none'"/-->
         </div>
         <div id="myplot"></div>
+        <div id="LocationsPlot"></div>
     </div>
     <script type=text/javascript>
         if ({{ files }}) {

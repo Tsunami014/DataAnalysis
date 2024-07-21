@@ -157,3 +157,18 @@ def CleanRainfall(rfs):
         cleanDatas[info['Station']] = df
         stationMap[info['Station']] = info['Name']
     yield [cleanDatas, stationMap], True
+
+def getAllNames(rfs, nms):
+    spl = [(int(i[:8]), i[8:12].strip(), i[12:18].strip(), i[18:59].strip(), i[59:75].strip(), float(i[75:84]), float(i[84:])) for i in nms.split('\n') if i != '']
+    names = ["Location", "State", "???", "Name", "????", "Lat", "Long"]
+    locs = pd.DataFrame({names[j]: {str(i): spl[i][j] for i in range(len(spl))} for j in range(len(names))})#'Location,State,???,Name,????,Lat,Long\n'+z)
+    # Until I find what it is, I'll remove the unknown columns
+    locs = locs.drop(columns=['???', '????'])
+
+    locs2 = pd.read_csv(StringIO("Location,Lat,Long,Elevation,Name\n"+re.sub('^(.*?) (.*?) (.*?) (.*?) (.*)', r'\1,\2,\3,\4,\5', rfs.extractfile('HQDR_stations.txt').read().decode(), flags=re.M)))
+    locs2 = locs2.drop('Elevation', axis=1) # Don't need the elevation; and also isn't in the other dataset
+    locs2['State'] = "Unknown"
+    locs = pd.concat((locs, locs2))
+    locs = locs.drop_duplicates(['Location'], keep='first') # First still has state data
+    locs.reset_index(drop=True, inplace=True)
+    return locs

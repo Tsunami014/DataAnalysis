@@ -4,6 +4,9 @@ import ftplib, io, os, re
 import zipfile, tarfile
 import pandas as pd
 import matplotlib.pyplot as plt
+from bokeh.plotting import figure, show
+from bokeh.models import ColumnDataSource, HoverTool
+from numpy import pi, tan, log
 from unlzw3 import unlzw
 from io import StringIO
 from random import randint
@@ -96,6 +99,14 @@ locs = pd.DataFrame({names[j]: {str(i): spl[i][j] for i in range(len(spl))} for 
 # Until I find what it is, I'll remove the unknown columns
 locs = locs.drop(columns=['???', '????'])
 
+z = xtracteds[1]
+locs2 = pd.read_csv(StringIO("Location,Lat,Long,Elevation,Name\n"+re.sub('^(.*?) (.*?) (.*?) (.*?) (.*)', r'\1,\2,\3,\4,\5', z.extractfile('HQDR_stations.txt').read().decode(), flags=re.M)))
+locs2 = locs2.drop('Elevation', axis=1) # Don't need the elevation; and also isn't in the other dataset
+locs2['State'] = "Unknown"
+locs = pd.concat((locs, locs2))
+locs = locs.drop_duplicates(['Location'], keep='first') # First still has state data
+locs.reset_index(drop=True, inplace=True)
+
 def getInfo(id):
     part = locs[locs['Location'] == id]
     if len(part) == 0:
@@ -184,3 +195,25 @@ plt.xlabel('Date')
 plt.ylabel('Rainfall (mm)') # At least, I'm *assuming* it's in mm
 plt.title(f'Rainfall in {stationMap[place]} ({place}) over time.')
 plt.show()
+
+# range bounds supplied in web mercator coordinates
+xoff, yoff = 12750000, -6250000
+p = figure(x_range=(xoff, 4000000+xoff), y_range=(yoff, 6000000+yoff),
+           x_axis_type="mercator", y_axis_type="mercator")
+
+# Thanks to https://stackoverflow.com/questions/57051517/cant-plot-dots-over-tile-on-bokeh !!!
+k = 6378137
+locs['x'] = locs['Long'] * (k * pi/180.0)
+locs['y'] = log(tan((90 + locs['Lat']) * pi/360.0)) * k
+
+source = ColumnDataSource(locs)
+
+p.scatter('x', 'y', source=source, size=5, fill_color="blue", fill_alpha=0.8)
+
+# Add hover tool
+hover = HoverTool(tooltips=[("Location number", "@Location"), ("Name", "@Name"), ("State", "@State")])
+p.add_tools(hover)
+
+p.add_tile("CartoDB Positron")
+
+show(p)
