@@ -126,7 +126,7 @@ def plot_name_map():
     # range bounds supplied in web mercator coordinates
     xoff, yoff = 12750000, -6250000
     p = figure(x_range=(xoff, 4000000+xoff), y_range=(yoff, 6000000+yoff),
-            x_axis_type="mercator", y_axis_type="mercator")
+            x_axis_type="mercator", y_axis_type="mercator", title="Locations of weather stations")
 
     # Thanks to https://stackoverflow.com/questions/57051517/cant-plot-dots-over-tile-on-bokeh !!!
     k = 6378137

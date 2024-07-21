@@ -8,6 +8,12 @@ body > div:not(.bk-ToolTip) {
     color: light-dark(black, white);
 }
 
+#Graphs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 #LocationsPlot * {
     color: #000;
   }
