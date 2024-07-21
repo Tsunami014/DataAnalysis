@@ -114,8 +114,19 @@ def delete_cache():
 
 @app.route('/get_names')
 def get_names():
+    locs = getAllNames(files['Xtracted'][1], files['Stations'])
+    def tryName(id):
+        try:
+            if files['Temps'][1](int(id))['Name'] != 'Unknown':
+                info = files['Temps'][1](int(id))
+            else:
+                idx = list(locs.Location).index(id)
+                info = locs.loc[idx]
+            return f'{info["Name"]}{", "+info["State"] if info["State"] != "Unknown" else ""} ({id})'
+        except:
+            return f'??? ({id})'
     # Stored as {'StationNumber': 'Name', ...}
-    return flask.jsonify({'Temps': {i: files['Temps'][1](int(i))['Name']+f'({i})' for i in files['Temps'][0]}, 'Rain': files['Rain'][1]})
+    return flask.jsonify({'Temps': {int(i): 'Temp_'+tryName(i) for i in files['Temps'][0]}, 'Rain': {i: 'Rain_'+tryName(i) for i in files['Rain'][1]}})
 
 @app.route('/plot_name_map')
 def plot_name_map():

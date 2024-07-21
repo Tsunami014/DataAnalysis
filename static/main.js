@@ -28,18 +28,15 @@ function file_status_check() {
                 textarea.scrollTop = textarea.scrollHeight;
                 document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILES STORED :)";
                 document.getElementById('StoredStyle').innerHTML = "";
-                select = document.getElementById('graphSelect');
+                select = document.getElementById('GraphOpts');
                 select.innetHTML = "";
                 fetch('/get_names').then(resp => {
                     resp.json().then(function(data) {
                         for (i in data) {
-                            var group = "";
                             for (j in data[i]) {
-                                group += `<option value="${i}_${j}">${data[i][j]}</option>`
+                                select.innerHTML += `<option value="${i}_${j}">${data[i][j]}</option>`
                             }
-                            select.innerHTML += `<optgroup label="${i}">${group}</optgroup>`
                         }
-                        graph(document.getElementById("graphSelect").value);
                     });
                 });
                 fetch('/plot_name_map')
@@ -91,4 +88,11 @@ function DeleteCache() {
     if(confirm('Are you sure you want to delete the cache?')) {
         fetch("delete_cache").then(resp => {updateCacheStatus();})
     }
+}
+
+function checkGraphInp() {
+    const currentValue = document.getElementById('graphSelect').value;
+    document.getElementById("GraphConfirm").disabled =
+        currentValue.length === 0 ||
+        document.querySelector('option[value="' + currentValue + '"]') === null;
 }

@@ -53,7 +53,15 @@
             <br>
             <form>
                 <label for="select" class="form-label">Pick a graph to show</label>
-                <select id="graphSelect" name="location" onchange="graph(this.value);"></select>
+                <input
+                    name="location"
+                    id="graphSelect"
+                    list="GraphOpts"
+                    class="disableAutoComplete"
+                    oninput="checkGraphInp()"
+                />
+                <datalist id="GraphOpts"></datalist>
+                <input type="button" onclick="graph(document.getElementById('graphSelect').value);" value="SHOW!" id="GraphConfirm" disabled>
             </form>
             <br>
             <!--img src='data:image/png;base64,{{data}}' onerror="this.style.display='none'"/-->
