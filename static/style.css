@@ -2,18 +2,22 @@
     font-family: sans-serif;
 }
 
+body > div:not(.bk-ToolTip) {
+    position: relative;
+    z-index: 1;
+    color: light-dark(black, white);
+}
+
+#LocationsPlot * {
+    color: #000;
+  }
+
 #game_canvas {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
-}
-
-body * {
-    position: relative;
-    z-index: 1;
-    color: light-dark(black, white);
 }
 
 .unselectable {
