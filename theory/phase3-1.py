@@ -128,7 +128,7 @@ def clean_data(dat):
     df['MinTemp'] = df['MinTemp']/10 # Adjust the temperature because of how it was stored
     return df
 
-print('Cleaning data (may take a short while)...')
+print('Cleaning Temperature data (may take a short while)...')
 alls = {i[:6]: clean_data(i) for i in datas}
 print('Done!')
 
