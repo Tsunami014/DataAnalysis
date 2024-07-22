@@ -11,6 +11,12 @@ from getWeather import (
     getAllNames
 )
 
+# TODO: Pickle objects for even *faster* loading!
+# TODO: Animate the ... on the loading screen
+# TODO: Show where *you* are currently on the map
+# TODO: Show where you are getting the data from on the map
+# TODO: Make the data avaliability different colours
+
 app = flask.Flask(__name__)
 
 @app.route('/favicon.ico')
@@ -19,45 +25,11 @@ def favicon():
 
 files = {}
 
-@wrapper
-def long_task(update):
-    import time, random
-    """Background task that runs a long function with progress reports."""
-    verb = ['Starting up', 'Booting', 'Repairing', 'Loading', 'Checking', 'Preparing', 'Cleaning']
-    adjective = ['master', 'radiant', 'silent', 'harmonic', 'fast', 'red', 'quick', 'silly']
-    noun = ['solar array', 'particle reshaper', 'cosmic ray', 'orbiter', 'bit', 'fire brigade', 'space station']
-    message = ''
-    total = random.randint(10, 50)
-    for i in range(total):
-        if not message or random.random() < 0.25:
-            message = '{0} {1} {2}...'.format(random.choice(verb),
-                                              random.choice(adjective),
-                                              random.choice(noun))
-        update(current=i,
-               total=total,
-               status=message)
-        time.sleep(random.randint(2, 20)/10)
-    return {'current': 100, 'total': 100, 'status': 'Task completed!',
-            'result': 42}
-
 @app.route('/status/<task_id>')
 def status(task_id):
     if task_id not in statuses:
         return flask.jsonify({'State': 'NONEXISTANT'})
     return flask.jsonify(statuses[task_id])
-
-@app.route('/longtask', methods=['POST'])
-def longfunc():
-    long_task('longtask')
-    return flask.jsonify({}), 202
-
-@app.route('/read-form', methods=['POST'])
-def read_form(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
-    # Get the form data as Python ImmutableDict datatype
-    data = flask.request.form
-  
-    ## Return the extracted information
-    return data
 
 @wrapper
 def get_files_long(update, cache, force):

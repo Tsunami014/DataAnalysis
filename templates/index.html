@@ -1,6 +1,5 @@
 <head>
     <script src="{{url_for('static', filename='BG_Anxiety.js')}}"></script>
-    <script src="{{url_for('static', filename='async.js')}}"></script>
     <script src="{{url_for('static', filename='main.js')}}"></script>
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='switch.css')}}">
@@ -27,10 +26,6 @@
         </div>
     </div>
     <div id="centreSection">
-        <p id="progress">NOT STARTED</p>
-        <p id="progressStatus"></p>
-        <p id="progressState">PRESS THE BUTTON BELOW TO START</p>
-        <button onclick="start_long_task();">Start!</button>
         <form action="{{ url_for('get_files')}}" method="post">
             <fieldset>
                 <legend>Cache settings</legend>
