@@ -8,6 +8,9 @@ from unlzw3 import unlzw
 from io import StringIO
 from random import randint
 
+pd.options.mode.chained_assignment = None  # default='warn'
+# It gives a warning which I can do nothing about, so I must stop it warning me
+
 files = {
     'temps.zip': '/anon/home/ncc/www/change/ACORN_SAT_daily/v2.4-raw-data-and-supporting-information.zip',
     'rain.tar': '/anon/home/ncc/www/change/HQdailyR/HQ_daily_prcp_txt.tar',

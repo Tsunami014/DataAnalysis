@@ -112,28 +112,36 @@ def delete_cache():
     remove_cache()
     return flask.jsonify({})
 
-@app.route('/get_names')
-def get_names():
+def names():
     locs = getAllNames(files['Xtracted'][1], files['Stations'])
     def tryName(id):
         try:
-            if files['Temps'][1](int(id))['Name'] != 'Unknown':
-                info = files['Temps'][1](int(id))
-            else:
-                idx = list(locs.Location).index(id)
-                info = locs.loc[idx]
-            return f'{info["Name"]}{", "+info["State"] if info["State"] != "Unknown" else ""} ({id})'
+            idx = list(locs.Location).index(int(id))
+            info = locs.loc[idx]
         except:
             return f'??? ({id})'
+        return f'{info["Name"]}{", "+info["State"] if info["State"] != "Unknown" else ""} ({id})'
     # Stored as {'StationNumber': 'Name', ...}
-    return flask.jsonify({'Temps': {int(i): 'Temp_'+tryName(i) for i in files['Temps'][0]}, 'Rain': {i: 'Rain_'+tryName(i) for i in files['Rain'][1]}})
+    return {'Temps': {i: 'Temp_'+tryName(i) for i in files['Temps'][0]}, 'Rain': {i: 'Rain_'+tryName(i) for i in files['Rain'][1]}}
+
+@app.route('/get_names')
+def get_names():
+    return flask.jsonify(names())
 
 @app.route('/plot_name_map')
 def plot_name_map():
     from numpy import pi, tan, log
     from bokeh.plotting import figure
     from bokeh.models import ColumnDataSource, HoverTool
+    nms = names()
+    places = {i: [j for j in nms[i]] for i in nms}
+    placesl = []
+    for i in places:
+        placesl.extend(places[i])
     locs = getAllNames(files['Xtracted'][1], files['Stations'])
+    # So we can see what data is available for the places
+    locs["Avaliable"] = locs.copy()["Location"].apply(lambda x: (("Temp" if x in places['Temps'] else "") + ("Rain" if x in places['Rain'] else "")))
+    
     # range bounds supplied in web mercator coordinates
     xoff, yoff = 12750000, -6250000
     p = figure(x_range=(xoff, 4000000+xoff), y_range=(yoff, 6000000+yoff),
@@ -149,7 +157,7 @@ def plot_name_map():
     p.scatter('x', 'y', source=source, size=5, fill_color="blue", fill_alpha=0.8)
 
     # Add hover tool
-    hover = HoverTool(tooltips=[("Location number", "@Location"), ("Name", "@Name"), ("State", "@State")])
+    hover = HoverTool(tooltips=[("Location number", "@Location"), ("Name", "@Name"), ("State", "@State"), ("Avaliable data", "@Avaliable")])
     p.add_tools(hover)
 
     p.add_tile("CartoDB Positron")
@@ -173,7 +181,7 @@ def plot(type, station):
         p = figure(title=f"Rainfall in {files['Rain'][1][int(station)]} ({station})", x_axis_label='Date', x_axis_type="datetime", y_axis_label='Rainfall (mm)')
         p.line(dat['Date'], dat['Rainfall'], legend_label="Rainfall (mm)", line_width=2, line_color="blue")
     elif type == 'Temps':
-        dat = files['Temps'][0][station]
+        dat = files['Temps'][0]['0'*(6-len(station))+station]
         p = figure(title=f"Temperatures in {files['Temps'][1](int(station))['Name']}, {files['Temps'][1](int(station))['State']} ({station})", x_axis_label='Date', x_axis_type="datetime", y_axis_label='Temperature (°C)')
         p.line(dat['Date'], dat['MaxTemp'], legend_label="Max Temp (°C)", line_width=2, line_color="red")
         p.line(dat['Date'], dat['MinTemp'], legend_label="Min Temp (°C)", line_width=2, line_color="blue")
