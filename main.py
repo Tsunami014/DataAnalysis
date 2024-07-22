@@ -15,7 +15,6 @@ from getWeather import (
 # TODO: Animate the ... on the loading screen
 # TODO: Show where *you* are currently on the map
 # TODO: Show where you are getting the data from on the map
-# TODO: Make the data avaliability different colours
 
 app = flask.Flask(__name__)
 
@@ -106,13 +105,14 @@ def plot_name_map():
     from bokeh.plotting import figure
     from bokeh.models import ColumnDataSource, HoverTool
     nms = names()
-    places = {i: [j for j in nms[i]] for i in nms}
+    places = {i: [int(j) for j in nms[i]] for i in nms}
     placesl = []
     for i in places:
         placesl.extend(places[i])
     locs = getAllNames(files['Xtracted'][1], files['Stations'])
+    locs["LocationStr"] = locs["Location"].apply(lambda x: '0'*(6-len(str(x)))+str(x))
     # So we can see what data is available for the places
-    locs["Avaliable"] = locs.copy()["Location"].apply(lambda x: (("Temp" if x in places['Temps'] else "") + ("Rain" if x in places['Rain'] else "")))
+    locs["Avaliable"] = locs["Location"].apply(lambda x: " & ".join([i for i in [("Temp" if x in places["Temps"] else ""), ("Rain" if x in places["Rain"] else "")] if i]))
     
     # range bounds supplied in web mercator coordinates
     xoff, yoff = 12750000, -6250000
@@ -124,12 +124,13 @@ def plot_name_map():
     locs['x'] = locs['Long'] * (k * pi/180.0)
     locs['y'] = log(tan((90 + locs['Lat']) * pi/360.0)) * k
 
-    source = ColumnDataSource(locs)
-
-    p.scatter('x', 'y', source=source, size=5, fill_color="blue", fill_alpha=0.8)
+    p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]=="Temp & Rain"]), size=10, fill_color="yellow", fill_alpha=0.9)
+    p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]=="Rain"]), size=8, fill_color="blue", fill_alpha=0.7)
+    p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]=="Temp"]), size=8, fill_color="red", fill_alpha=0.7)
+    p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]==""]), size=4, fill_color="white", fill_alpha=0.5)
 
     # Add hover tool
-    hover = HoverTool(tooltips=[("Location number", "@Location"), ("Name", "@Name"), ("State", "@State"), ("Avaliable data", "@Avaliable")])
+    hover = HoverTool(tooltips=[("Location number", "@LocationStr"), ("Name", "@Name"), ("State", "@State"), ("Avaliable data", "@Avaliable")])
     p.add_tools(hover)
 
     p.add_tile("CartoDB Positron")
@@ -148,13 +149,14 @@ def get_data(type, station):
 @app.route('/plot/<type>/<station>')
 def plot(type, station):
     from bokeh.plotting import figure
+    nms = names()
     if type == 'Rain':
         dat = files['Rain'][0][int(station)]
-        p = figure(title=f"Rainfall in {files['Rain'][1][int(station)]} ({station})", x_axis_label='Date', x_axis_type="datetime", y_axis_label='Rainfall (mm)')
+        p = figure(title="Rainfall in "+nms['Rain'][int(station)][5:], x_axis_label='Date', x_axis_type="datetime", y_axis_label='Rainfall (mm)')
         p.line(dat['Date'], dat['Rainfall'], legend_label="Rainfall (mm)", line_width=2, line_color="blue")
     elif type == 'Temps':
         dat = files['Temps'][0]['0'*(6-len(station))+station]
-        p = figure(title=f"Temperatures in {files['Temps'][1](int(station))['Name']}, {files['Temps'][1](int(station))['State']} ({station})", x_axis_label='Date', x_axis_type="datetime", y_axis_label='Temperature (°C)')
+        p = figure(title="Temperatures in "+nms['Temps'][station][5:], x_axis_label='Date', x_axis_type="datetime", y_axis_label='Temperature (°C)')
         p.line(dat['Date'], dat['MaxTemp'], legend_label="Max Temp (°C)", line_width=2, line_color="red")
         p.line(dat['Date'], dat['MinTemp'], legend_label="Min Temp (°C)", line_width=2, line_color="blue")
     else:

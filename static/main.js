@@ -34,7 +34,7 @@ function file_status_check() {
                     resp.json().then(function(data) {
                         for (i in data) {
                             for (j in data[i]) {
-                                select.innerHTML += `<option value="${i}_${j}">${data[i][j]}</option>`
+                                select.innerHTML += `<option value="${i}_${j.padStart(6, '0')}">${data[i][j].padStart(6, '0')}</option>`
                             }
                         }
                     });
