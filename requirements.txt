@@ -1,5 +1,6 @@
 flask
 ipywidgets
-bookeh
+bokeh
 matplotlib
 numpy
+unlzw3

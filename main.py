@@ -15,6 +15,7 @@ from getWeather import (
 # TODO: Animate the ... on the loading screen
 # TODO: Show where *you* are currently on the map
 # TODO: Show where you are getting the data from on the map
+# TODO: Rename a whole lot of stuff to be cooler
 
 app = flask.Flask(__name__)
 
@@ -90,10 +91,11 @@ def names():
             idx = list(locs.Location).index(int(id))
             info = locs.loc[idx]
         except:
-            return f'??? ({id})'
-        return f'{info["Name"]}{", "+info["State"] if info["State"] != "Unknown" else ""} ({id})'
+            return f'??? ({"0"*(6-len(str(id)))+str(id)})'
+        return f'{info["Name"]}{", "+info["State"] if info["State"] != "Unknown" else ""} ({"0"*(6-len(str(id)))+str(id)})'
     # Stored as {'StationNumber': 'Name', ...}
-    return {'Temps': {i: 'Temp_'+tryName(i) for i in files['Temps'][0]}, 'Rain': {i: 'Rain_'+tryName(i) for i in files['Rain'][1]}}
+    return {'Temps': {'0'*(6-len(str(i)))+str(i): 'Temp_'+tryName(i) for i in files['Temps'][0]}, 
+            'Rain': {'0'*(6-len(str(i)))+str(i): 'Rain_'+tryName(i) for i in files['Rain'][1]}}
 
 @app.route('/get_names')
 def get_names():
@@ -152,7 +154,7 @@ def plot(type, station):
     nms = names()
     if type == 'Rain':
         dat = files['Rain'][0][int(station)]
-        p = figure(title="Rainfall in "+nms['Rain'][int(station)][5:], x_axis_label='Date', x_axis_type="datetime", y_axis_label='Rainfall (mm)')
+        p = figure(title="Rainfall in "+nms['Rain'][station][5:], x_axis_label='Date', x_axis_type="datetime", y_axis_label='Rainfall (mm)')
         p.line(dat['Date'], dat['Rainfall'], legend_label="Rainfall (mm)", line_width=2, line_color="blue")
     elif type == 'Temps':
         dat = files['Temps'][0]['0'*(6-len(station))+station]
