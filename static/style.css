@@ -8,7 +8,7 @@ body > div:not(.bk-ToolTip) {
     color: light-dark(black, white);
 }
 
-#Graphs {
+.centre {
     display: flex;
     justify-content: center;
     align-items: center;

@@ -1,4 +1,6 @@
-import flask, json
+from math import ceil
+import os
+import flask, json, pickle
 from asyncro import wrapper, statuses
 from bokeh.embed import json_item
 from getWeather import (
@@ -31,6 +33,21 @@ def status(task_id):
         return flask.jsonify({'State': 'NONEXISTANT'})
     return flask.jsonify(statuses[task_id])
 
+# IDEA: Don't let users download anywhere; just in one spot and check there
+
+@app.route('/upload')
+def upload_file():
+    global files, statuses
+    files = pickle.loads(open('theory/cache/savestate.pkl', 'rb').read())
+    statuses['get_files'] = {"State": 'FINISHED', 'txt': 'Successfully loaded quick-save!'}
+    ## Return to the main page
+    return flask.redirect('/')
+
+@app.route('/download')
+def downloadData():
+    pickle.dump(files, open('theory/cache/savestate.pkl', 'wb+'))
+    return flask.jsonify({})
+
 @wrapper
 def get_files_long(update, cache, force):
     global files
@@ -47,9 +64,8 @@ def get_files_long(update, cache, force):
             update(txt=resp)
         else:
             xtracted = resp
-            files['Xtracted'] = resp
             break
-    files['Stations'] = xtracted[2]
+    files['Names'] = getAllNames(xtracted[1].extractfile('HQDR_stations.txt').read().decode(), xtracted[2])
     for resp, ret in CleanTemperatures(xtracted[0], xtracted[2]):
         if not ret:
             update(txt=resp)
@@ -65,7 +81,6 @@ def get_files_long(update, cache, force):
 
 @app.route('/get_files', methods=['POST'])
 def get_files(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
-    global files
     # Get the form data as Python ImmutableDict datatype
     data = {'Cache': 'off', 'Force': 'off'} # Because when it's off, for some reason it does not show in the dict
     data.update(dict(flask.request.form))
@@ -85,7 +100,7 @@ def delete_cache():
     return flask.jsonify({})
 
 def names():
-    locs = getAllNames(files['Xtracted'][1], files['Stations'])
+    locs = files['Names'].copy()
     def tryName(id):
         try:
             idx = list(locs.Location).index(int(id))
@@ -94,7 +109,7 @@ def names():
             return f'??? ({"0"*(6-len(str(id)))+str(id)})'
         return f'{info["Name"]}{", "+info["State"] if info["State"] != "Unknown" else ""} ({"0"*(6-len(str(id)))+str(id)})'
     # Stored as {'StationNumber': 'Name', ...}
-    return {'Temps': {'0'*(6-len(str(i)))+str(i): 'Temp_'+tryName(i) for i in files['Temps'][0]}, 
+    return {'Temps': {'0'*(6-len(str(i)))+str(i): 'Temp_'+tryName(i) for i in files['Temps']}, 
             'Rain': {'0'*(6-len(str(i)))+str(i): 'Rain_'+tryName(i) for i in files['Rain'][1]}}
 
 @app.route('/get_names')
@@ -111,7 +126,7 @@ def plot_name_map():
     placesl = []
     for i in places:
         placesl.extend(places[i])
-    locs = getAllNames(files['Xtracted'][1], files['Stations'])
+    locs = files['Names'].copy()
     locs["LocationStr"] = locs["Location"].apply(lambda x: '0'*(6-len(str(x)))+str(x))
     # So we can see what data is available for the places
     locs["Avaliable"] = locs["Location"].apply(lambda x: " & ".join([i for i in [("Temp" if x in places["Temps"] else ""), ("Rain" if x in places["Rain"] else "")] if i]))
@@ -139,15 +154,6 @@ def plot_name_map():
 
     return json.dumps(json_item(p, "LocationsPlot"))
 
-@app.route('/get_data/<type>/<station>')
-def get_data(type, station):
-    if type == 'Rain':
-        return flask.jsonify(files['Rain'][0][int(station)])
-    elif type == 'Temps':
-        return flask.jsonify(files['Temps'][0][station])
-    else:
-        return flask.jsonify({'ERROR': 'Invalid type'}), 404
-
 @app.route('/plot/<type>/<station>')
 def plot(type, station):
     from bokeh.plotting import figure
@@ -157,7 +163,7 @@ def plot(type, station):
         p = figure(title="Rainfall in "+nms['Rain'][station][5:], x_axis_label='Date', x_axis_type="datetime", y_axis_label='Rainfall (mm)')
         p.line(dat['Date'], dat['Rainfall'], legend_label="Rainfall (mm)", line_width=2, line_color="blue")
     elif type == 'Temps':
-        dat = files['Temps'][0]['0'*(6-len(station))+station]
+        dat = files['Temps']['0'*(6-len(station))+station]
         p = figure(title="Temperatures in "+nms['Temps'][station][5:], x_axis_label='Date', x_axis_type="datetime", y_axis_label='Temperature (°C)')
         p.line(dat['Date'], dat['MaxTemp'], legend_label="Max Temp (°C)", line_width=2, line_color="red")
         p.line(dat['Date'], dat['MinTemp'], legend_label="Min Temp (°C)", line_width=2, line_color="blue")

@@ -89,29 +89,6 @@ def extractFiles(fs):
     yield extracted, True
 
 def CleanTemperatures(tmps, nms):
-    yield "Cleaning Names...", False
-    spl = [(int(i[:8]), i[8:12].strip(), i[12:18].strip(), i[18:59].strip(), i[59:75].strip(), float(i[75:84]), float(i[84:])) for i in nms.split('\n') if i != '']
-    names = ["Location", "State", "???", "Name", "????", "Lat", "Long"]
-    locs = pd.DataFrame({names[j]: {str(i): spl[i][j] for i in range(len(spl))} for j in range(len(names))})#'Location,State,???,Name,????,Lat,Long\n'+z)
-    # Until I find what it is, I'll remove the unknown columns
-    locs = locs.drop(columns=['???', '????'])
-
-    def getInfo(id):
-        part = locs[locs['Location'] == id]
-        if len(part) == 0:
-            return {
-            'Name': 'Unknown', 
-            'State': 'Unknown', 
-            'Lat': 'Unknown', 
-            'Long': 'Unknown'
-        }
-        return {
-            'Name': part.Name.values[0], 
-            'State': part.State.values[0], 
-            'Lat': part.Lat.values[0], 
-            'Long': part.Long.values[0]
-        }
-    
     yield "Cleaning Temperature data (may take a short while)...", False
     dirs = [i for i in tmps.namelist() if i.startswith('raw-data/') if i != 'raw-data/Raw data.7z' and i != 'raw-data/']
     datas = [tmps.open(i).read().decode() for i in dirs]
@@ -128,7 +105,7 @@ def CleanTemperatures(tmps, nms):
         df['MinTemp'] = df['MinTemp']/10 # Adjust the temperature because of how it was stored
         return df.to_dict('list')
 
-    yield [{i[:6]: clean_data(i) for i in datas}, getInfo], True
+    yield {i[:6]: clean_data(i) for i in datas}, True
 
 def CleanRainfall(rfs):
     dirs = rfs.getnames()
@@ -161,14 +138,14 @@ def CleanRainfall(rfs):
         stationMap[info['Station']] = info['Name']
     yield [cleanDatas, stationMap], True
 
-def getAllNames(rfs, nms):
-    spl = [(int(i[:8]), i[8:12].strip(), i[12:18].strip(), i[18:59].strip(), i[59:75].strip(), float(i[75:84]), float(i[84:])) for i in nms.split('\n') if i != '']
+def getAllNames(nms, nms2):
+    spl = [(int(i[:8]), i[8:12].strip(), i[12:18].strip(), i[18:59].strip(), i[59:75].strip(), float(i[75:84]), float(i[84:])) for i in nms2.split('\n') if i != '']
     names = ["Location", "State", "???", "Name", "????", "Lat", "Long"]
     locs = pd.DataFrame({names[j]: {str(i): spl[i][j] for i in range(len(spl))} for j in range(len(names))})#'Location,State,???,Name,????,Lat,Long\n'+z)
     # Until I find what it is, I'll remove the unknown columns
     locs = locs.drop(columns=['???', '????'])
 
-    locs2 = pd.read_csv(StringIO("Location,Lat,Long,Elevation,Name\n"+re.sub('^(.*?) (.*?) (.*?) (.*?) (.*)', r'\1,\2,\3,\4,\5', rfs.extractfile('HQDR_stations.txt').read().decode(), flags=re.M)))
+    locs2 = pd.read_csv(StringIO("Location,Lat,Long,Elevation,Name\n"+re.sub('^(.*?) (.*?) (.*?) (.*?) (.*)', r'\1,\2,\3,\4,\5', nms, flags=re.M)))
     locs2 = locs2.drop('Elevation', axis=1) # Don't need the elevation; and also isn't in the other dataset
     locs2['State'] = "Unknown"
     locs = pd.concat((locs, locs2))
