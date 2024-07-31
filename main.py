@@ -13,7 +13,6 @@ from getWeather import (
     getAllNames
 )
 
-# TODO: Pickle objects for even *faster* loading!
 # TODO: Animate the ... on the loading screen
 # TODO: Show where *you* are currently on the map
 # TODO: Show where you are getting the data from on the map
@@ -174,6 +173,6 @@ def plot(type, station):
 
 @app.route('/')
 def main():
-    return flask.render_template("index.html", files=str('get_files' in statuses).lower())
+    return flask.render_template("index.html", files=str('get_files' in statuses).lower(), is_disabled=('disabled' if not os.path.exists('theory/cache/savestate.pkl') else ''))
 
 app.run()

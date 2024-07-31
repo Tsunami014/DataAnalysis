@@ -13,10 +13,10 @@ function scrollDown() {
 }
 
 function Download() {
-    fetch('/download').then(resp => {resp.text().then(function(data) {
-        let a = document.getElementById("downloadElement");
-        a.click();
-    })});
+    fetch('/download').then(resp => {
+        document.getElementById("Load").disabled = false;
+
+    });
 }
 
 function file_status_check() {
