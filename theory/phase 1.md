@@ -17,6 +17,7 @@ data, or solar power data. Pick one that interests you the most.
         - Asthetics: The program needs to look good so people can have a nice time using the product
         - Speed: The program should be fast in order to provide the user with a better interface and quick response.
         - Accuracy: The program should be able to provide the user with a correct range of temperature and chance of rain; so the user can plan their day accordingly.
+        - Usability: The program should be easy to setup, install and use to allow for users to have a good time using it and also so they *can* in the first place.
 - > Use Cases: Provide an example of how users will interact with the system.
 
     - ```yaml
@@ -48,6 +49,16 @@ data, or solar power data. Pick one that interests you the most.
       After:
        - System saves cleaned data as a pickled python object
        - System plots the data in the UI
+      ```
+    - ```yaml
+      Actor: User
+      Goal: To display the cleaned data about a place
+      Preconditions: The user has the cleaned information stored and has selected a place
+      Main Flow:
+       - System loads the data into a graph
+       - System passes the graph data to the UI and the UI displays the graph
+      Postconditions: None
+      After: Nothing happens
       ```
     - ```yaml
       Actor: User
