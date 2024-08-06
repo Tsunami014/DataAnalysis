@@ -17,6 +17,53 @@ data, or solar power data. Pick one that interests you the most.
         - Asthetics: The program needs to look good so people can have a nice time using the product
         - Speed: The program should be fast in order to provide the user with a better interface and quick response.
         - Accuracy: The program should be able to provide the user with a correct range of temperature and chance of rain; so the user can plan their day accordingly.
+- > Use Cases: Provide an example of how users will interact with the system.
+
+    - ```yaml
+      Actor: User
+      Goal: To download the files needed.
+      Preconditions: User either has all the files already cached in the folder OR has a wifi connection that allows reading the BOM FTP.
+      Main Flow:
+       - FOR each file:
+           - IF file is already cached AND NOT force redownloading:
+               - System gets file from cache.
+           - ELSE:
+               - System connects to the FTP site if not already
+               - System tells user it's downloading file
+               - System downloads file from predetermined location
+      Postconditions: All files are successfully downloaded
+      After:
+       - System moves on to cleaning (see below)
+      ```
+    - ```yaml
+      Actor: System
+      Goal: To clean the data and get only the things needed
+      Preconditions: The user has downloaded the files
+      Main Flow:
+       - FOR (temperature,rainfall):
+           - Unzip the data into an object
+           - Find all the raw data files in the zip
+           - Turn them into pandas dataframes and clean them
+      Postconditions: Cleaned data is stored in a dictionary
+      After:
+       - System saves cleaned data as a pickled python object
+       - System plots the data in the UI
+      ```
+    - ```yaml
+      Actor: User
+      Goal: To train a neural network to predict the weather for a place
+      Preconditions: The user has the cleaned information stored and has selected a place
+      Main Flow:
+       - Get the data avaliable for the place specified
+       - Feed it into the neural network
+       - Start it's training
+       - Report on the training progression regularly
+      Postconditions: Model has finished it's training
+      After:
+       - Show cool graphs on training
+       - Show the model's prediction of the weather
+       - Let user save model for ease of use again
+      ```
 
 ## IDEA
 What if I made a JavaScript version of this so I can host it on Github pages?
