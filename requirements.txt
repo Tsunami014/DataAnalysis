@@ -4,3 +4,5 @@ bokeh
 matplotlib
 numpy
 unlzw3
+tensorflow
+scikit-learn
