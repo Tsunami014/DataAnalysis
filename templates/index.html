@@ -26,7 +26,7 @@
         </div>
     </div>
     <div id="centreSection">
-        <form action="{{ url_for('get_files') }}" method="post">
+        <form action="/stations/get_data" method="post">
             <fieldset>
                 <legend>Cache settings</legend>
                 <label for="checkbox" class="form-label">NOTE: It will still use already cached files unless you use force refresh. The Cache option is for if you download something; should it be cached.</label><br>
@@ -44,7 +44,7 @@
                 <button type="submit" class="btn btn-primary">Get files</button>
             </fieldset>
         </form>
-        <form action="/upload">
+        <form action="/quicksave/upload">
             <fieldset>
                 <legend>Savestate</legend>
                 <div class="together centre">

@@ -4,5 +4,5 @@ bokeh
 matplotlib
 numpy
 unlzw3
-tensorflow
+tensorflow<2.11
 scikit-learn
