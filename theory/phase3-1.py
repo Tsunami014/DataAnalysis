@@ -124,8 +124,9 @@ def getInfo(id):
     }
 
 z = xtracteds[0]
-dirs = [i for i in z.namelist() if i.startswith('raw-data/') if i != 'raw-data/Raw data.7z' and i != 'raw-data/']
-datas = [z.open(i).read().decode() for i in dirs]
+# 41 = len('v2.4-raw-data-and-supporting-information/')
+dirs = [i for i in tmps.namelist() if i[41:].startswith('raw-data/') if i[41:] not in ['raw-data/Raw data.7z', 'raw-data/']]
+datas = [tmps.open(i).read().decode() for i in dirs]
 
 def clean_data(dat):
     cleaned = re.sub(' +', ',', # Replace the spaces that *were* the deliminers to commas. Theer were not the same number of spaces each time either.

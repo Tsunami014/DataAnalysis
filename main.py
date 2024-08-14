@@ -16,7 +16,6 @@ from getWeather import (
 # TODO: Animate the ... on the loading screen
 # TODO: Show where *you* are currently on the map
 # TODO: Show where you are getting the data from on the map
-# TODO: Rename a whole lot of stuff to be cooler
 
 app = flask.Flask(__name__)
 
@@ -32,17 +31,15 @@ def status(task_id):
         return flask.jsonify({'State': 'NONEXISTANT'})
     return flask.jsonify(statuses[task_id])
 
-# IDEA: Don't let users download anywhere; just in one spot and check there
-
-@app.route('/upload')
+@app.route('/quicksave/upload')
 def upload_file():
     global files, statuses
     files = pickle.loads(open('theory/cache/savestate.pkl', 'rb').read())
-    statuses['get_files'] = {"State": 'FINISHED', 'txt': 'Successfully loaded quick-save!'}
+    statuses['get_data'] = {"State": 'FINISHED', 'txt': 'Successfully loaded quick-save!'}
     ## Return to the main page
     return flask.redirect('/')
 
-@app.route('/download')
+@app.route('/quicksave/download')
 def downloadData():
     pickle.dump(files, open('theory/cache/savestate.pkl', 'wb+'))
     return flask.jsonify({})
@@ -78,22 +75,22 @@ def get_files_long(update, cache, force):
             files['Rain'] = resp
             break
 
-@app.route('/get_files', methods=['POST'])
-def get_files(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
+@app.route('/stations/get_data', methods=['POST'])
+def get_data(): # Thanks to https://www.geeksforgeeks.org/how-to-use-web-forms-in-a-flask-application/
     # Get the form data as Python ImmutableDict datatype
     data = {'Cache': 'off', 'Force': 'off'} # Because when it's off, for some reason it does not show in the dict
     data.update(dict(flask.request.form))
     
-    get_files_long('get_files', data['Cache'] == 'on', data['Force'] == 'on')
+    get_files_long('get_data', data['Cache'] == 'on', data['Force'] == 'on')
   
     ## Return to the main page
     return flask.redirect('/')
 
-@app.route('/cache_status')
+@app.route('/cache')
 def cache_status():
     return cached_status(flask.request.args.get('cache') == 'true', flask.request.args.get('force') == 'true')
 
-@app.route('/delete_cache')
+@app.route('/cache/delete')
 def delete_cache():
     remove_cache()
     return flask.jsonify({})
@@ -111,11 +108,11 @@ def names():
     return {'Temps': {'0'*(6-len(str(i)))+str(i): 'Temp_'+tryName(i) for i in files['Temps']}, 
             'Rain': {'0'*(6-len(str(i)))+str(i): 'Rain_'+tryName(i) for i in files['Rain'][1]}}
 
-@app.route('/get_names')
+@app.route('/stations')
 def get_names():
     return flask.jsonify(names())
 
-@app.route('/plot_name_map')
+@app.route('/stations/plot')
 def plot_name_map():
     from numpy import pi, tan, log
     from bokeh.plotting import figure
@@ -153,7 +150,7 @@ def plot_name_map():
 
     return json.dumps(json_item(p, "LocationsPlot"))
 
-@app.route('/plot/<type>/<station>')
+@app.route('/stations/plot/<type>/<station>')
 def plot(type, station):
     from bokeh.plotting import figure
     nms = names()
@@ -173,6 +170,6 @@ def plot(type, station):
 
 @app.route('/')
 def main():
-    return flask.render_template("index.html", files=str('get_files' in statuses).lower(), is_disabled=('disabled' if not os.path.exists('theory/cache/savestate.pkl') else ''))
+    return flask.render_template("index.html", files=str('get_data' in statuses).lower(), is_disabled=('disabled' if not os.path.exists('theory/cache/savestate.pkl') else ''))
 
 app.run()
