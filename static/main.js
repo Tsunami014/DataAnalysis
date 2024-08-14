@@ -1,6 +1,16 @@
 function onload() {
     document.getElementById("Cache").checked = true;
     document.getElementById("Force").checked = false;
+    document.getElementById("graphSelect").addEventListener("keypress", function(e) {
+        if (e.key === "Enter") {
+            e.preventDefault();
+            checkGraphInp();
+            var btn = document.getElementById("GraphConfirm");
+            if (!btn.disabled) {
+                btn.click();
+            }
+        }
+    });
     updateCacheStatus();
     load_BG();
 }
