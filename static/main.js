@@ -2,6 +2,7 @@ var loadingICO;
 var lock = false;
 var lockDesc = "";
 var AITrained = "";
+var dots = 0;
 
 function onload() {
     document.getElementById("Cache").checked = true;
@@ -152,51 +153,46 @@ function loadLI() {
     });
 }
 
-function file_status_check() {
+async function file_status_check() {
     // send GET request to status URL
-    fetch("status/get_data").then(resp => {
-        resp.json().then(function(data) {
-            var textarea = document.getElementById('FilesStatus');
-            if ('txt' in data) {
-                var replacements = ["   ", ".  ", ".. ", "..."][new Date().getSeconds() % 4];
-                // Can use [. ]{3}\\.* if one day we want to use regex
-                textarea.innerHTML = data.txt.replace("...", replacements);// + "&#13;&#10;";
-                textarea.scrollTop = textarea.scrollHeight;
+    var data = await (await fetch("status/get_data")).json();
+    var textarea = document.getElementById('FilesStatus');
+    if ('txt' in data) {
+        dots ++;
+        if (dots > 3) {
+            dots = 0;
+        }
+        var replacements = ["   ", ".  ", ".. ", "..."][dots];
+        // Can use [. ]{3}\\.* if one day we want to use regex
+        textarea.innerHTML = data.txt.replace("...", replacements);// + "&#13;&#10;";
+        textarea.scrollTop = textarea.scrollHeight;
+    }
+    if (data.State == 'ERROR') {
+        document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>ERROR IN FILE HANDLING!";
+        textarea.innerHTML = data.Error.toString();
+        Toast("ERROR IN FILE PROCESSING! See file status panel for more info.", 2);
+        return;
+    }
+    if (data.State != 'FINISHED') {
+        setTimeout(file_status_check, 500);
+    } else {
+        textarea.innerHTML = "Done!";
+        textarea.scrollTop = textarea.scrollHeight;
+        document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILES STORED :)";
+        document.getElementById('StoredStyle').innerHTML = "";
+        select = document.getElementById('GraphOpts');
+        select.innerHTML = "";
+        var data = await (await fetch('/stations')).json();
+        for (let i in data) {
+            for (let j in data[i]) {
+                select.innerHTML += `<option value="${i}_${j.padStart(6, '0')}">${data[i][j].padStart(6, '0')}</option>`
             }
-            if (data.State == 'ERROR') {
-                document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>ERROR IN FILE HANDLING!";
-                textarea.innerHTML = data.Error.toString();
-                Toast("ERROR IN FILE PROCESSING! See file status panel for more info.", 2);
-                return;
-            }
-            if (data.State != 'FINISHED') {
-                setTimeout(file_status_check, 500);
-            } else {
-                textarea.innerHTML = "Done!";
-                textarea.scrollTop = textarea.scrollHeight;
-                document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILES STORED :)";
-                document.getElementById('StoredStyle').innerHTML = "";
-                select = document.getElementById('GraphOpts');
-                select.innerHTML = "";
-                fetch('/stations').then(resp => {
-                    resp.json().then(function(data) {
-                        for (let i in data) {
-                            for (let j in data[i]) {
-                                select.innerHTML += `<option value="${i}_${j.padStart(6, '0')}">${data[i][j].padStart(6, '0')}</option>`
-                            }
-                        }
-                    });
-                });
-                fetch('/stations/plot')
-                    .then(function(response) { return response.json(); })
-                    .then(function(item) {
-                        Bokeh.embed.embed_item(item);
-                        scrollDown();
-                        ReleaseLock();
-                    })
-            }
-        })
-    });
+        }
+        var item = (await fetch('/stations/plot')).json();
+        Bokeh.embed.embed_item(item);
+        scrollDown();
+        ReleaseLock();
+    }
 }
 
 function graph(value) {
