@@ -14,7 +14,7 @@ pip install https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.11.0-
  - [ ] Get data for EVERY place
  - [ ] Get more data (cloud coverage, maybe?)
  - [ ] Build the neural network
- - [ ] Animate the ... on the loading panel
+ - [x] Animate the ... on the loading panel
  - [ ] Add a lot more of the spinning ...'s everywhere
  - [ ] Round the edges of all the plots
  - [ ] Rename 'store files' to 'File downloading and cleaning' to be more precise and clear

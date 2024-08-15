@@ -150,19 +150,21 @@ function file_status_check() {
         resp.json().then(function(data) {
             var textarea = document.getElementById('FilesStatus');
             if ('txt' in data) {
-                document.getElementById('FilesStatus').innerHTML = data.txt;// + "&#13;&#10;";
+                var replacements = ["   ", ".  ", ".. ", "..."][new Date().getSeconds() % 4];
+                // Can use [. ]{3}\\.* if one day we want to use regex
+                textarea.innerHTML = data.txt.replace("...", replacements);// + "&#13;&#10;";
                 textarea.scrollTop = textarea.scrollHeight;
             }
             if (data.State == 'ERROR') {
                 document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>ERROR IN FILE HANDLING!";
-                document.getElementById('FilesStatus').innerHTML = data.Error.toString();
+                textarea.innerHTML = data.Error.toString();
                 Toast("ERROR IN FILE PROCESSING! See file status panel for more info.", 2);
                 return;
             }
             if (data.State != 'FINISHED') {
                 setTimeout(file_status_check, 500);
             } else {
-                document.getElementById('FilesStatus').innerHTML = "Done!";
+                textarea.innerHTML = "Done!";
                 textarea.scrollTop = textarea.scrollHeight;
                 document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILES STORED :)";
                 document.getElementById('StoredStyle').innerHTML = "";
