@@ -30,7 +30,7 @@ function openSide() {
     side.style.width = '0';
     side.style.display = 'block';
     setTimeout(function() {
-        side.style.width = '250px';
+        side.style.width = '650px';
         setTimeout(function() {
             side.classList.add('opened');
         }, 500);
@@ -105,7 +105,7 @@ function graph(value) {
         .then(function(item) {
             document.getElementById('myplot').innerHTML = "";
             Bokeh.embed.embed_item(item);
-            scrollDown();
+            openSide();
         })
 }
 

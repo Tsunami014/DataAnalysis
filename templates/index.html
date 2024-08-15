@@ -146,17 +146,15 @@
                 </form>
                 <br>
             </div>
-            <div class="centre">
-                <div id="WeatherPlotArea">
-                    <button id="trainAIButton" type="button" onclick="alert('hi')" style="position: absolute;top: 0;left: 0;">Train<br>AI<br>here</button>
-                    <div id="myplot"></div>
-                </div>
-                <div id="LocationsPlot"></div>
-            </div>
+            <div id="LocationsPlot" class="centre"></div>
         </div>
-        <div id="Side" class="Section closed unselectable">
-            <span id="closeSideButton" class="SideMenuButton topRight" onclick="closeSide()">&times;</span>
-            <p>HI</p>
+        <div id="Side" class="Section closed">
+            <p>To train an AI, first download and clean the data, then pick a location!</p>
+            <span id="closeSideButton" class="SideMenuButton topRight unselectable" onclick="closeSide()">&times;</span>
+            <div id="WeatherPlotArea" class="centre">
+                <button id="trainAIButton" type="button" onclick="alert('hi')" style="position: absolute;top: 0;left: 0;">Train<br>AI<br>here</button>
+                <div id="myplot"></div>
+            </div>
         </div>
     </div>
     <script type=text/javascript>
