@@ -1,6 +1,7 @@
 var loadingICO;
 var lock = false;
 var lockDesc = "";
+var AITrained = "";
 
 function onload() {
     document.getElementById("Cache").checked = true;
@@ -107,6 +108,12 @@ function scrollDown() {
         var area = document.getElementById('DownloadSelectSection');
         area.scrollTop = area.scrollHeight;
     }, 100);
+}
+
+function trainAI() {
+    if (!UpdateLock("Training AI")) {return;}
+    Toast("We tooooooootaly trained an AI in half a millisecond. Aren't we so cool?");
+    ReleaseLock();
 }
 
 function Download() {

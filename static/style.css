@@ -96,7 +96,8 @@ body > div:not(.bk-ToolTip) {
     width: 100%;
 }
 
-#myplot:empty + #trainAIButton {
+/* We don't need to specify #trainAIButton, but it won't change so I don't care */
+#myplot:empty + #trainAIButton, #myplot:empty ~ * {
     display: none;
 }
 

@@ -170,6 +170,9 @@ def plot(type, station):
 
 @app.route('/')
 def main():
-    return flask.render_template("index.html", files=str('get_data' in statuses).lower(), is_disabled=('disabled' if not os.path.exists('theory/cache/savestate.pkl') else ''))
+    return flask.render_template("index.html", 
+                                 files=str('get_data' in statuses).lower(), 
+                                 is_disabled=('disabled' if not os.path.exists('theory/cache/savestate.pkl') else '')
+                                )
 
 app.run()

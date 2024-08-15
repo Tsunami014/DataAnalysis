@@ -165,7 +165,9 @@
             <p>To train an AI, first download and clean the data, then pick a location!</p>
             <span id="closeSideButton" class="SideMenuButton topRight unselectable" onclick="closeSide()">&times;</span>
             <div id="myplot" class="centre"></div>
-            <button id="trainAIButton" type="button" onclick="alert('hi')">Train AI here</button>
+            <button id="trainAIButton" type="button" onclick="trainAI();">Train AI on this data</button>
+            <p>AI Training status:</p>
+            <textarea disabled id="AIStatus" style="resize: none;" cols='70' rows='4'>HAVEN'T STARTED, plz press da button</textarea><br>
         </div>
     </div>
     <script type=text/javascript>
