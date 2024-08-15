@@ -96,7 +96,7 @@ body > div:not(.bk-ToolTip) {
     width: 100%;
 }
 
-#trainAIButton:has(+ #myplot:empty) {
+#myplot:empty + #trainAIButton {
     display: none;
 }
 
