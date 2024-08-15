@@ -74,6 +74,10 @@ body > div:not(.bk-ToolTip) {
     z-index: 1;
 }
 
+#trainAIButton:has(+ #myplot:empty) {
+    display: none;
+}
+
 #myplot canvas.bk-layer {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
