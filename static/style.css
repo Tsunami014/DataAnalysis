@@ -2,6 +2,16 @@
     font-family: sans-serif;
 }
 
+:root {
+    --svg-theme-light-primary: #090D49;
+    --svg-theme-light-secondary: #65CDAE;
+    --svg-theme-light-tertiary: #E5E7EB;
+
+    --svg-theme-dark-primary: #FFF;
+    --svg-theme-dark-secondary: #65CDAE;
+    --svg-theme-dark-tertiary: #37A987;
+}
+
 body > div:not(.bk-ToolTip) {
     position: relative;
     z-index: 1;
@@ -83,4 +93,24 @@ body > div:not(.bk-ToolTip) {
 .together {
     display: flex;
     align-items: center;
+}
+
+/* Modified version of https://static.snoweb.io/snowebsvg/dist/css/themesauto-0.0.131.css to fit this light-dark theme */
+.svg-fill-primary {
+    fill:light-dark(var(--svg-theme-light-primary), var(--svg-theme-dark-primary))
+}
+.svg-fill-secondary {
+    fill:light-dark(var(--svg-theme-light-secondary), var(--svg-theme-dark-secondary))
+}
+.svg-fill-tertiary {
+    fill:light-dark(var(--svg-theme-light-tertiary), var(--svg-theme-dark-tertiary))
+}
+.svg-stroke-primary {
+    stroke:light-dark(var(--svg-theme-light-primary), var(--svg-theme-dark-primary))
+}
+.svg-stroke-secondary {
+    stroke:light-dark(var(--svg-theme-light-secondary), var(--svg-theme-dark-secondary))
+}
+.svg-stroke-tertiary {
+    stroke:light-dark(var(--svg-theme-light-tertiary), var(--svg-theme-dark-tertiary))
 }
