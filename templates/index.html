@@ -18,6 +18,19 @@
 </head>
 <canvas id="game_canvas"></canvas>
 <body onload="onload();">
+    <div id="LoadingToCopy">
+        <svg class="svg-snoweb svg-theme-light svg-trigger rotating" height="30" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" width="30" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
+            <clippath id="clip-path-202408-1504-1406-f0e6c446-d658-4ac7-a25e-568a844e1552">
+                <circle cx="50" cy="50" r="50"></circle>
+            </clippath>
+            <circle class="svg-fill-tertiary" cx="50" cy="50" r="50"></circle>
+            <circle class="svg-fill-secondary svg-builder-circle" cx="50" cy="50" r="50"></circle>
+            <g transform="translate(20.00, 20.00) scale(0.60, 0.60)">
+                <path class="svg-stroke-primary" d="M21.9,50h0M50,50h0m28.1,0h0M25.9,50a4,4,0,1,1-4-4A4,4,0,0,1,25.9,50ZM54,50a4,4,0,1,1-4-4A4,4,0,0,1,54,50Zm28.1,0a4,4,0,1,1-4-4A4,4,0,0,1,82.1,50Z" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="8">
+                </path>
+            </g>
+        </svg>
+    </div>
     <div class="topRight">
         <p class="unselectable" style="margin-bottom: 1px; margin-top: 5px;">Theme:</p>
         <div class="together">
@@ -31,7 +44,7 @@
         <span class="SideMenuButton unselectable" onclick="toggleSide()">&#9776;</span>
     </div>
     <div id="Main">
-        <div class="Section">
+        <div id="DownloadSelectSection" class="Section">
             <form action="/stations/get_data" method="post">
                 <fieldset>
                     <legend>Cache settings</legend>
@@ -108,10 +121,11 @@
                                 </g>
                             </svg>
                         </button>
+                        <div id="downloadLoadingIco"></div>
                     </div>
                     <div class="together centre">
                         <p>Quickload files:&nbsp;&nbsp;&nbsp;</p>
-                        <button id="Load" type="submit" {{ is_disabled }}>
+                        <button id="Load" type="submit" onclick="loadLI()" {{ is_disabled }}>
                             <svg class="svg-snoweb svg-theme-light svg-trigger" height="30" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" width="30" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
                                 <clippath id="clip-path-202408-1501-2649-74807339-3fce-412c-b2db-9c1a011c2879">
                                     <circle cx="50" cy="50" r="50"></circle>
@@ -126,6 +140,7 @@
                                 </g>
                             </svg>
                         </button>
+                        <div id="loadLoadingIco"></div>
                     </div>
                 </fieldset>
             </form>

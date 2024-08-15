@@ -1,3 +1,5 @@
+var loadingICO;
+
 function onload() {
     document.getElementById("Cache").checked = true;
     document.getElementById("Force").checked = false;
@@ -11,6 +13,7 @@ function onload() {
             }
         }
     });
+    loadingICO = document.getElementById("LoadingToCopy").innerHTML;
     updateCacheStatus();
     load_BG();
 }
@@ -49,16 +52,22 @@ function closeSide() {
 
 function scrollDown() {
     setTimeout(function() {
-        var area = document.getElementById('centreSection');
+        var area = document.getElementById('DownloadSelectSection');
         area.scrollTop = area.scrollHeight;
     }, 100);
 }
 
 function Download() {
+    var thisLI = document.getElementById("downloadLoadingIco");
+    thisLI.innerHTML = loadingICO;
     fetch('/quicksave/download').then(resp => {
         document.getElementById("Load").disabled = false;
-
+        thisLI.innerHTML = "";
     });
+}
+
+function loadLI() {
+    document.getElementById("loadLoadingIco").innerHTML = loadingICO;
 }
 
 function file_status_check() {

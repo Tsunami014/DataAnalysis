@@ -122,6 +122,19 @@ body > div:not(.bk-ToolTip) {
     align-items: center;
 }
 
+#LoadingToCopy {
+    display: none;
+}
+
+.rotating {
+    animation: rotate 1s infinite;
+}
+ 
+@keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
 /* Modified version of https://static.snoweb.io/snowebsvg/dist/css/themesauto-0.0.131.css to fit this light-dark theme */
 .svg-fill-primary {
     fill:light-dark(var(--svg-theme-light-primary), var(--svg-theme-dark-primary))
