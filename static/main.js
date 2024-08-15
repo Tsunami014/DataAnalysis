@@ -127,7 +127,6 @@ function Download() {
             }).catch(function() {
                 Toast("Error downloading quick-save: Unknown reason.", 2);
             });
-            return;
         }
         document.getElementById("Load").disabled = false;
         thisLI.innerHTML = "";
@@ -137,7 +136,8 @@ function Download() {
 
 function loadLI() {
     if (!UpdateLock("Loading quick-save")) {return;}
-    document.getElementById("loadLoadingIco").innerHTML = loadingICO;
+    var thisLI = document.getElementById("loadLoadingIco");
+    thisLI.innerHTML = loadingICO;
     fetch('/quicksave/upload').then(resp => {
         if (!resp.ok) {
             resp.json().then(function(data) {
@@ -145,8 +145,9 @@ function loadLI() {
             }).catch(function() {
                 Toast("Error restoring quick-save: Unknown reason.", 2);
             });
-            return;
         }
+        document.getElementById("Load").disabled = false;
+        thisLI.innerHTML = "";
         ReleaseLock();
     });
 }
