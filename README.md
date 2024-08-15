@@ -17,6 +17,7 @@ pip install https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.11.0-
  - [ ] Animate the ... on the loading panel
  - [ ] Add a lot more of the spinning ...'s everywhere
  - [ ] Round the edges of all the plots
+ - [ ] **ERROR HANDLING**
  - [ ] Show where *you* are currently on the map
  - [ ] Show where you are getting the data from on the map
 
