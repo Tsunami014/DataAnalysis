@@ -96,7 +96,7 @@ def CleanTemperatures(tmps, nms):
 
     def clean_data(dat):
         cleaned = re.sub(' +', ',', # Replace the spaces that *were* the deliminers to commas. Theer were not the same number of spaces each time either.
-                        re.sub('\r\n......', '\n', dat) # Remove the station number and \r. The station number is the same every time, and returned along with the dataframe.
+                        re.sub('\r?\n......', '\n', dat) # Remove the station number and \r. The station number is the same every time, and returned along with the dataframe.
         ).replace(',\n', '\n' # Because the spaces are a pain and all over the place!
                             )[6:] # The first station number does not get cleaned, so remove it here. 
         df = pd.read_csv(StringIO('Date,MaxTemp,MinTemp\n'+cleaned))
