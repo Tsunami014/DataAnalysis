@@ -21,9 +21,15 @@ function onload() {
     load_BG();
 }
 
-function Toast(text) {
+function Toast(text, type=0) {
+    // type 0 = normal, 1 = warn, 2 = error
     var toast = document.createElement('div');
     toast.classList.add('toast');
+    if (type === 1) {
+        toast.classList.add('warnToast');
+    } else if (type === 2) {
+        toast.classList.add('errorToast');
+    }
     toast.innerText = text;
     document.body.appendChild(toast);
     setTimeout(function() { // Give it enough time to relax so it can animate
@@ -41,7 +47,7 @@ function Toast(text) {
 
 function UpdateLock(desc) {
     if (lock) {
-        Toast("Lock is set; something is running. Please wait for that to finish before continuing.");
+        Toast(`Lock is set - "${lockDesc}" is in progress. Please wait for that to finish before continuing.`, 1);
         return false;
     }
     lock = true;
@@ -104,7 +110,7 @@ function scrollDown() {
 }
 
 function Download() {
-    if (!UpdateLock("Download quick-save")) {return;}
+    if (!UpdateLock("Downloading quick-save")) {return;}
     var thisLI = document.getElementById("downloadLoadingIco");
     thisLI.innerHTML = loadingICO;
     fetch('/quicksave/download').then(resp => {
@@ -115,7 +121,7 @@ function Download() {
 }
 
 function loadLI() {
-    if (!UpdateLock("Download quick-save")) {return true;}
+    if (!UpdateLock("Loading quick-save")) {return true;}
     document.getElementById("loadLoadingIco").innerHTML = loadingICO;
     return false;
 }
@@ -152,6 +158,7 @@ function file_status_check() {
                     .then(function(item) {
                         Bokeh.embed.embed_item(item);
                         scrollDown();
+                        ReleaseLock();
                     })
             }
         })

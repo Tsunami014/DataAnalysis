@@ -173,6 +173,7 @@
     <script type=text/javascript>
         if ({{ files }}) {
             document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILE STORAGE IN PROGRESS";
+            UpdateLock("Storing files");
             file_status_check();
         }
     </script>

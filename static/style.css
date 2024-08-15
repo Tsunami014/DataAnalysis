@@ -130,6 +130,10 @@ body > div:not(.bk-ToolTip) {
     transition: 0.5s;
 }
 
+.warnToast {
+    background-color: light-dark(#fdec7d99, #af9b1b99);
+}
+
 .errorToast {
     background-color: light-dark(#ff5d5d99, #a0070799);
 }
