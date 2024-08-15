@@ -115,6 +115,21 @@ body > div:not(.bk-ToolTip) {
     align-items: center;
 }
 
+.toast {
+    opacity: 0;
+    width: 35vw;
+    background-color: light-dark(#77777799, #33333399);
+    text-align: center;
+    border-radius: 3px;
+    padding: 16px;
+    position: fixed !important;
+    z-index: 1;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    transition: 0.5s;
+}
+
 #LoadingToCopy {
     display: none;
 }

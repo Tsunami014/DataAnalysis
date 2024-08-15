@@ -19,6 +19,24 @@ function onload() {
     load_BG();
 }
 
+function Toast(text) {
+    var toast = document.createElement('div');
+    toast.classList.add('toast');
+    toast.innerText = text;
+    document.body.appendChild(toast);
+    setTimeout(function() { // Give it enough time to relax so it can animate
+        toast.style.opacity = 1;
+        toast.style.bottom = '30px';
+        setTimeout(function() {
+            toast.style.opacity = 0;
+            toast.style.bottom = '10px';
+            setTimeout(function() {
+                document.body.removeChild(toast);
+            }, 500);
+        }, 3000);
+    }, 10);
+}
+
 function updateTheme() {
     var cnt;
     if (document.getElementById("themeSwitch").checked) {
