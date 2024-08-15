@@ -2,6 +2,10 @@
     font-family: sans-serif;
 }
 
+.vAlign * {
+    vertical-align: middle;
+}
+
 :root {
     --svg-theme-light-primary: #090D49;
     --svg-theme-light-secondary: #65CDAE;
