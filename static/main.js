@@ -1,4 +1,6 @@
 var loadingICO;
+var lock = false;
+var lockDesc = "";
 
 function onload() {
     document.getElementById("Cache").checked = true;
@@ -35,6 +37,21 @@ function Toast(text) {
             }, 500);
         }, 3000);
     }, 10);
+}
+
+function UpdateLock(desc) {
+    if (lock) {
+        Toast("Lock is set; something is running. Please wait for that to finish before continuing.");
+        return false;
+    }
+    lock = true;
+    lockDesc = desc;
+    return true;
+}
+
+function ReleaseLock() {
+    lock = false;
+    lockDesc = "";
 }
 
 function updateTheme() {
@@ -87,16 +104,20 @@ function scrollDown() {
 }
 
 function Download() {
+    if (!UpdateLock("Download quick-save")) {return;}
     var thisLI = document.getElementById("downloadLoadingIco");
     thisLI.innerHTML = loadingICO;
     fetch('/quicksave/download').then(resp => {
         document.getElementById("Load").disabled = false;
         thisLI.innerHTML = "";
+        ReleaseLock();
     });
 }
 
 function loadLI() {
+    if (!UpdateLock("Download quick-save")) {return true;}
     document.getElementById("loadLoadingIco").innerHTML = loadingICO;
+    return false;
 }
 
 function file_status_check() {

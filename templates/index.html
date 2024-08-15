@@ -125,7 +125,7 @@
                     </div>
                     <div class="together centre">
                         <p>Quickload files:&nbsp;&nbsp;&nbsp;</p>
-                        <button id="Load" type="submit" onclick="loadLI()" {{ is_disabled }}>
+                        <button id="Load" type="submit" onclick="if (loadLI()) {event.preventDefault();}" {{ is_disabled }}>
                             <svg class="svg-snoweb svg-theme-light svg-trigger" height="30" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" width="30" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
                                 <clippath id="clip-path-202408-1501-2649-74807339-3fce-412c-b2db-9c1a011c2879">
                                     <circle cx="50" cy="50" r="50"></circle>
@@ -162,7 +162,6 @@
                 <br>
             </div>
             <div id="LocationsPlot" class="centre"></div>
-            <button onclick="Toast('This is a toast message!');">Test da Toast</button>
         </div>
         <div id="Side" class="Section closed">
             <p>To train an AI, first download and clean the data, then pick a location!</p>
