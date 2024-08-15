@@ -123,7 +123,7 @@ function Download() {
     fetch('/quicksave/download').then(resp => {
         if (!resp.ok) {
             resp.json().then(function(data) {
-                Toast("Error downloading quick-save: "+data.toString(), 2);
+                Toast("Error downloading quick-save: "+JSON.stringify(data), 2);
             }).catch(function() {
                 Toast("Error downloading quick-save: Unknown reason.", 2);
             });
@@ -141,7 +141,7 @@ function loadLI() {
     fetch('/quicksave/upload').then(resp => {
         if (!resp.ok) {
             resp.json().then(function(data) {
-                Toast("Error restoring quick-save: "+data.toString(), 2);
+                Toast("Error restoring quick-save: "+JSON.stringify(data), 2);
             }).catch(function() {
                 Toast("Error restoring quick-save: Unknown reason.", 2);
             });
