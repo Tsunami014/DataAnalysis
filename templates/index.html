@@ -29,127 +29,132 @@
             <p class="unselectable">  Light</p>
         </div>
     </div>
-    <div id="centreSection">
-        <form action="/stations/get_data" method="post">
-            <fieldset>
-                <legend>Cache settings</legend>
-                <label for="checkbox" class="form-label">NOTE: It will still use already cached files unless you use force refresh. The Cache option is for if you download something; should it be cached.</label><br>
-                <input type="checkbox" id="Cache" name="Cache" oninput="updateCacheStatus();">Cache?</input><br>
-                <input type="checkbox" id="Force" name="Force" oninput="updateCacheStatus();">Force refresh cache?</input><br>
-                <p id="CacheStatus"></p>
-                <div class="vAlign">
-                    <button type="button" onclick="updateCacheStatus();">
-                        <svg class="svg-snoweb svg-theme-light svg-trigger" height="30" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" width="30" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
-                            <clippath id="clip-path-202408-1501-4057-0feec15e-fdc3-4bf8-b137-2151570a23fc">
-                                <rect height="5" width="100" x="0" y="95"></rect>
-                            </clippath>
-                            <g clip-path="url(#clip-path-202408-1501-4057-0feec15e-fdc3-4bf8-b137-2151570a23fc)">
-                                <rect class="svg-fill-tertiary" height="5" width="100" x="0" y="95"></rect>
-                                <g transform="translate(0, 50)">
-                                    <circle class="svg-fill-secondary svg-builder-circle" cx="50" cy="50" r="50"></circle>
+    <div id="Main">
+        <div class="Section">
+            <form action="/stations/get_data" method="post">
+                <fieldset>
+                    <legend>Cache settings</legend>
+                    <label for="checkbox" class="form-label">NOTE: It will still use already cached files unless you use force refresh. The Cache option is for if you download something; should it be cached.</label><br>
+                    <input type="checkbox" id="Cache" name="Cache" oninput="updateCacheStatus();">Cache?</input><br>
+                    <input type="checkbox" id="Force" name="Force" oninput="updateCacheStatus();">Force refresh cache?</input><br>
+                    <p id="CacheStatus"></p>
+                    <div class="vAlign">
+                        <button type="button" onclick="updateCacheStatus();">
+                            <svg class="svg-snoweb svg-theme-light svg-trigger" height="30" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" width="30" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
+                                <clippath id="clip-path-202408-1501-4057-0feec15e-fdc3-4bf8-b137-2151570a23fc">
+                                    <rect height="5" width="100" x="0" y="95"></rect>
+                                </clippath>
+                                <g clip-path="url(#clip-path-202408-1501-4057-0feec15e-fdc3-4bf8-b137-2151570a23fc)">
+                                    <rect class="svg-fill-tertiary" height="5" width="100" x="0" y="95"></rect>
+                                    <g transform="translate(0, 50)">
+                                        <circle class="svg-fill-secondary svg-builder-circle" cx="50" cy="50" r="50"></circle>
+                                    </g>
                                 </g>
-                            </g>
-                            <g transform="translate(20.00, 20.00) scale(0.60, 0.60)">
-                                <path class="svg-fill-primary" d="M49.976,86.268c-4.508,0-9.021-.855-13.336-2.57-12.297-4.886-20.922-16.081-22.51-29.218-.265-2.192,1.298-4.186,3.491-4.451,2.191-.266,4.186,1.298,4.451,3.492,1.236,10.225,7.95,18.938,17.522,22.741,6.975,2.772,14.613,2.66,21.504-.312,4.966-2.142,9.116-5.584,12.084-9.95h-11.182c-2.209,0-4-1.791-4-4s1.791-4,4-4h17.709c.061-.003,.122-.003,.185,0h2.206c2.209,0,4,1.791,4,4v20.1c0,2.209-1.791,4-4,4s-4-1.791-4-4v-9.3c-3.638,4.528-8.348,8.13-13.833,10.496-4.59,1.979-9.438,2.972-14.291,2.972Z" opacity=".5">
-                                </path>
-                                <path class="svg-fill-primary" d="M81.896,50.001c-1.995,0-3.721-1.49-3.966-3.521-1.86-15.383-15.895-26.384-31.27-24.525-8.14,.984-15.323,5.44-19.833,12.045h11.172c2.209,0,4,1.791,4,4s-1.791,4-4,4H20.291c-.062,0-.124,0-.184,0h-2.207c-2.209,0-4-1.791-4-4V17.9c0-2.209,1.791-4,4-4s4,1.791,4,4v9.324c5.817-7.235,14.301-12.063,23.8-13.211,19.757-2.385,37.782,11.746,40.171,31.508,.266,2.193-1.298,4.186-3.49,4.451-.163,.02-.325,.029-.485,.029Z">
-                                </path>
-                            </g>
-                        </svg> Cache Status
-                    </button>
-                    <label for="button" class="form-label">Delete Cache</label>
-                    <button type="button" onclick="DeleteCache();">
-                        <svg class="svg-snoweb svg-theme-light svg-trigger" height="20" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" width="20" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
-                            <clippath id="clip-path-202408-1501-2755-81266cb3-9435-45f5-83a0-a770d16c97a8">
-                                <rect height="100" rx="15" ry="15" width="100" x="0" y="0"></rect>
-                            </clippath>
-                            <g clip-path="url(#clip-path-202408-1501-2755-81266cb3-9435-45f5-83a0-a770d16c97a8)">
-                                <rect class="svg-fill-tertiary" height="100" rx="15" ry="15" width="100" x="0" y="0"></rect>
-                                <g transform="translate(-22.50, -22.50) scale(1.45, 1.45)">
-                                    <circle class="svg-fill-secondary svg-builder-circle" cx="50" cy="50" r="50"></circle>
+                                <g transform="translate(20.00, 20.00) scale(0.60, 0.60)">
+                                    <path class="svg-fill-primary" d="M49.976,86.268c-4.508,0-9.021-.855-13.336-2.57-12.297-4.886-20.922-16.081-22.51-29.218-.265-2.192,1.298-4.186,3.491-4.451,2.191-.266,4.186,1.298,4.451,3.492,1.236,10.225,7.95,18.938,17.522,22.741,6.975,2.772,14.613,2.66,21.504-.312,4.966-2.142,9.116-5.584,12.084-9.95h-11.182c-2.209,0-4-1.791-4-4s1.791-4,4-4h17.709c.061-.003,.122-.003,.185,0h2.206c2.209,0,4,1.791,4,4v20.1c0,2.209-1.791,4-4,4s-4-1.791-4-4v-9.3c-3.638,4.528-8.348,8.13-13.833,10.496-4.59,1.979-9.438,2.972-14.291,2.972Z" opacity=".5">
+                                    </path>
+                                    <path class="svg-fill-primary" d="M81.896,50.001c-1.995,0-3.721-1.49-3.966-3.521-1.86-15.383-15.895-26.384-31.27-24.525-8.14,.984-15.323,5.44-19.833,12.045h11.172c2.209,0,4,1.791,4,4s-1.791,4-4,4H20.291c-.062,0-.124,0-.184,0h-2.207c-2.209,0-4-1.791-4-4V17.9c0-2.209,1.791-4,4-4s4,1.791,4,4v9.324c5.817-7.235,14.301-12.063,23.8-13.211,19.757-2.385,37.782,11.746,40.171,31.508,.266,2.193-1.298,4.186-3.49,4.451-.163,.02-.325,.029-.485,.029Z">
+                                    </path>
                                 </g>
-                            </g>
-                            <g transform="translate(20.00, 20.00) scale(0.60, 0.60)">
-                                <path class="svg-fill-primary" d="M42,42c-2.21,0-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4s4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4Zm16,0c-2.21,0-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4s4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4Zm0,0c-2.21,0-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4s4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4Zm-16,0c-2.21,0-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4s4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4Zm40.1-16.1h-16.1v-8c0-4.41-3.59-8-8-8h-16c-4.41,0-8,3.59-8,8v8H17.9c-2.21,0-4,1.79-4,4s1.79,4,4,4h.28l3.23,45.1c.47,6.23,5.72,11.1,11.96,11.1h33.25c6.25,0,11.5-4.87,11.97-11.11l3.23-45.09h.28c2.21,0,4-1.79,4-4s-1.79-4-4-4Zm-40.1-8h16v8h-16v-8Zm28.61,60.5c-.15,2.08-1.91,3.7-4,3.7H33.38c-2.08,0-3.84-1.62-3.99-3.69l-3.19-44.51h47.6l-3.19,44.5Zm-12.61-4.3c2.21,0,4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4s-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4Zm-16,0c2.21,0,4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4s-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4Z">
-                                </path>
-                                <path class="svg-fill-primary" d="M26.2,33.9l3.19,44.51c.15,2.07,1.91,3.69,3.99,3.69h33.23c2.09,0,3.85-1.62,4-3.7l3.19-44.5H26.2Zm19.8,36.2c0,2.21-1.79,4-4,4s-4-1.79-4-4v-24.1c0-2.21,1.79-4,4-4s4,1.79,4,4v24.1Zm16,0c0,2.21-1.79,4-4,4s-4-1.79-4-4v-24.1c0-2.21,1.79-4,4-4s4,1.79,4,4v24.1Z" opacity=".5">
-                                </path>
-                            </g>
-                        </svg>
-                    </button>
-                </div><br>
-            </fieldset>
-            <fieldset>
-                <legend>Files</legend>
-                <p id="FilesInfo"><b>Status: </b>FILES NOT STORED</p>
-                <textarea disabled id="FilesStatus" style="resize: none;" cols='60' rows='3'></textarea><br>
-                <button type="submit" class="btn btn-primary">Get files</button>
-            </fieldset>
-        </form>
-        <form action="/quicksave/upload">
-            <fieldset>
-                <legend>Savestate</legend>
-                <div class="together centre">
-                    <p>Quicksave files:&nbsp;&nbsp;&nbsp;</p>
-                    <button onclick="Download();" type="button">
-                        <svg class="svg-snoweb svg-theme-light svg-trigger" width="30" height="30" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
-                            <clippath id="clip-path-202408-1500-4204-d9268812-a550-4cb6-bcc7-491efa9595a6">
-                                <circle cx="50" cy="50" r="50"></circle>
-                            </clippath>
-                            <circle class="svg-fill-tertiary" cx="50" cy="50" r="50"></circle>
-                            <circle class="svg-fill-secondary svg-builder-circle" cx="50" cy="50" r="50"></circle>
-                            <g transform="translate(20.00, 20.00) scale(0.60, 0.60)">
-                                <path class="svg-fill-primary" d="M74.7,28.3h-10.601c-2.209,0-4,1.791-4,4s1.791,4,4,4h10.601c1.709,0,3.1,1.391,3.1,3.1v31.8c0,1.709-1.391,3.1-3.1,3.1H25.3c-1.709,0-3.1-1.391-3.1-3.1v-31.8c0-1.709,1.391-3.1,3.1-3.1h10.6c2.209,0,4-1.791,4-4s-1.791-4-4-4h-10.6c-6.12,0-11.1,4.979-11.1,11.1v31.8c0,6.12,4.979,11.1,11.1,11.1h49.4c6.12,0,11.1-4.979,11.1-11.1v-31.8c0-6.121-4.979-11.1-11.1-11.1Z">
-                                </path>
-                                <path class="svg-fill-primary" d="M36.571,43.672c-1.562,1.562-1.562,4.095,0,5.657l10.597,10.596,.002,.003h0c.186,.186,.391,.352,.61,.498,.1,.067,.208,.112,.312,.169,.125,.068,.244,.143,.377,.198,.134,.055,.273,.087,.411,.128,.112,.033,.22,.076,.336,.099,.259,.051,.521,.079,.784,.079s.525-.028,.783-.079c.117-.023,.226-.067,.339-.101,.137-.04,.275-.072,.408-.127,.133-.055,.254-.131,.38-.2,.103-.056,.21-.101,.308-.167,.22-.147,.426-.314,.612-.501l10.597-10.597c1.562-1.562,1.562-4.095,0-5.657-1.561-1.562-4.096-1.562-5.656,0l-3.771,3.771V21.7c0-2.209-1.791-4-4-4s-4,1.791-4,4v25.743l-3.772-3.772c-1.562-1.562-4.094-1.562-5.657,0Z" opacity=".5">
-                                </path>
-                            </g>
-                        </svg>
-                    </button>
-                </div>
-                <div class="together centre">
-                    <p>Quickload files:&nbsp;&nbsp;&nbsp;</p>
-                    <button id="Load" type="submit" {{ is_disabled }}>
-                        <svg class="svg-snoweb svg-theme-light svg-trigger" height="30" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" width="30" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
-                            <clippath id="clip-path-202408-1501-2649-74807339-3fce-412c-b2db-9c1a011c2879">
-                                <circle cx="50" cy="50" r="50"></circle>
-                            </clippath>
-                            <circle class="svg-fill-tertiary" cx="50" cy="50" r="50"></circle>
-                            <circle class="svg-fill-secondary svg-builder-circle" cx="50" cy="50" r="50"></circle>
-                            <g transform="translate(20.00, 20.00) scale(0.60, 0.60)">
-                                <path class="svg-fill-primary" d="M32.355,67.902c-4.665,0-9.069-1.778-12.432-5.028-3.438-3.323-5.376-7.786-5.458-12.566-.125-7.301,4.201-13.825,10.673-16.683-.018-.312-.03-.623-.037-.934-.098-5.738,2.037-11.149,6.009-15.259,3.973-4.11,9.308-6.428,15.023-6.525,9.409-.132,17.573,5.71,20.568,14.33,10.444,1.203,18.707,10.051,18.892,20.896,.179,10.471-7.163,19.47-17.456,21.398-2.175,.408-4.261-1.023-4.668-3.195-.406-2.171,1.023-4.261,3.195-4.668,6.445-1.207,11.042-6.843,10.931-13.398-.126-7.387-6.28-13.289-13.626-13.17h-.369c-1.925,0-3.577-1.371-3.932-3.263-1.208-6.445-6.879-11.066-13.398-10.931-7.388,.125-13.296,6.238-13.17,13.626,.023,1.03,.135,2.089,.331,3.124,.405,2.14-.976,4.21-3.106,4.658-4.635,.976-7.94,5.121-7.859,9.857,.093,5.458,4.578,9.827,10.067,9.73,.023,0,.046,0,.07,0,2.177,0,3.961,1.746,3.998,3.932,.038,2.209-1.723,4.03-3.931,4.067-.104,.002-.209,.003-.313,.003Z" opacity=".5">
-                                </path>
-                                <path class="svg-fill-primary" d="M63.242,50.685l-10.4-10.5-.007-.006-.015-.015-.005-.006c-.039-.039-.085-.065-.125-.101-.147-.135-.297-.268-.463-.379l-.026-.017c-.1-.066-.208-.11-.311-.166-.117-.063-.227-.135-.351-.186l-.033-.014c-.126-.051-.258-.079-.387-.117l-.005-.002c-.107-.031-.209-.074-.32-.097l-.029-.005c-.124-.024-.25-.026-.375-.038-.127-.012-.253-.036-.381-.036h-.016c-.116,0-.23,.023-.345,.033-.138,.012-.275,.015-.411,.041l-.028,.005c-.104,.021-.199,.061-.299,.09l-.008,.003c-.136,.039-.273,.069-.405,.122l-.034,.014c-.116,.049-.221,.117-.331,.176-.11,.059-.224,.106-.329,.176l-.028,.018c-.157,.105-.296,.232-.436,.358-.049,.044-.104,.076-.151,.122l-.006,.007-.013,.013-.007,.006-10.4,10.5c-1.555,1.57-1.542,4.102,.027,5.657,.78,.772,1.797,1.158,2.815,1.158,1.03,0,2.06-.396,2.842-1.186l3.558-3.592v32.078c0,2.209,1.791,4,4,4s4-1.791,4-4V52.722l3.559,3.593c.782,.79,1.812,1.186,2.842,1.186,1.018,0,2.035-.386,2.814-1.158,1.57-1.555,1.582-4.087,.027-5.657Z">
-                                </path>
-                            </g>
-                        </svg>
-                    </button>
-                </div>
-            </fieldset>
-        </form>
-        <div id="IfStored">
-            <br>
-            <form>
-                <label for="select" class="form-label">Pick a graph to show</label>
-                <input
-                    name="location"
-                    id="graphSelect"
-                    list="GraphOpts"
-                    class="disableAutoComplete"
-                    oninput="checkGraphInp()"
-                    style="width: 500px;"
-                />
-                <datalist id="GraphOpts"></datalist>
-                <input type="button" onclick="graph(document.getElementById('graphSelect').value);" value="SHOW!" id="GraphConfirm" disabled>
+                            </svg> Cache Status
+                        </button>
+                        <label for="button" class="form-label">Delete Cache</label>
+                        <button type="button" onclick="DeleteCache();">
+                            <svg class="svg-snoweb svg-theme-light svg-trigger" height="20" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" width="20" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
+                                <clippath id="clip-path-202408-1501-2755-81266cb3-9435-45f5-83a0-a770d16c97a8">
+                                    <rect height="100" rx="15" ry="15" width="100" x="0" y="0"></rect>
+                                </clippath>
+                                <g clip-path="url(#clip-path-202408-1501-2755-81266cb3-9435-45f5-83a0-a770d16c97a8)">
+                                    <rect class="svg-fill-tertiary" height="100" rx="15" ry="15" width="100" x="0" y="0"></rect>
+                                    <g transform="translate(-22.50, -22.50) scale(1.45, 1.45)">
+                                        <circle class="svg-fill-secondary svg-builder-circle" cx="50" cy="50" r="50"></circle>
+                                    </g>
+                                </g>
+                                <g transform="translate(20.00, 20.00) scale(0.60, 0.60)">
+                                    <path class="svg-fill-primary" d="M42,42c-2.21,0-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4s4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4Zm16,0c-2.21,0-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4s4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4Zm0,0c-2.21,0-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4s4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4Zm-16,0c-2.21,0-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4s4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4Zm40.1-16.1h-16.1v-8c0-4.41-3.59-8-8-8h-16c-4.41,0-8,3.59-8,8v8H17.9c-2.21,0-4,1.79-4,4s1.79,4,4,4h.28l3.23,45.1c.47,6.23,5.72,11.1,11.96,11.1h33.25c6.25,0,11.5-4.87,11.97-11.11l3.23-45.09h.28c2.21,0,4-1.79,4-4s-1.79-4-4-4Zm-40.1-8h16v8h-16v-8Zm28.61,60.5c-.15,2.08-1.91,3.7-4,3.7H33.38c-2.08,0-3.84-1.62-3.99-3.69l-3.19-44.51h47.6l-3.19,44.5Zm-12.61-4.3c2.21,0,4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4s-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4Zm-16,0c2.21,0,4-1.79,4-4v-24.1c0-2.21-1.79-4-4-4s-4,1.79-4,4v24.1c0,2.21,1.79,4,4,4Z">
+                                    </path>
+                                    <path class="svg-fill-primary" d="M26.2,33.9l3.19,44.51c.15,2.07,1.91,3.69,3.99,3.69h33.23c2.09,0,3.85-1.62,4-3.7l3.19-44.5H26.2Zm19.8,36.2c0,2.21-1.79,4-4,4s-4-1.79-4-4v-24.1c0-2.21,1.79-4,4-4s4,1.79,4,4v24.1Zm16,0c0,2.21-1.79,4-4,4s-4-1.79-4-4v-24.1c0-2.21,1.79-4,4-4s4,1.79,4,4v24.1Z" opacity=".5">
+                                    </path>
+                                </g>
+                            </svg>
+                        </button>
+                    </div><br>
+                </fieldset>
+                <fieldset>
+                    <legend>Files</legend>
+                    <p id="FilesInfo"><b>Status: </b>FILES NOT STORED</p>
+                    <textarea disabled id="FilesStatus" style="resize: none;" cols='60' rows='3'></textarea><br>
+                    <button type="submit" class="btn btn-primary">Get files</button>
+                </fieldset>
             </form>
-            <br>
-        </div>
-        <div class="centre">
-            <div id="WeatherPlotArea">
-                <button id="trainAIButton" type="button" onclick="alert('hi')" style="position: absolute;top: 0;left: 0;">Train<br>AI<br>here</button>
-                <div id="myplot"></div>
+            <form action="/quicksave/upload">
+                <fieldset>
+                    <legend>Savestate</legend>
+                    <div class="together centre">
+                        <p>Quicksave files:&nbsp;&nbsp;&nbsp;</p>
+                        <button onclick="Download();" type="button">
+                            <svg class="svg-snoweb svg-theme-light svg-trigger" width="30" height="30" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
+                                <clippath id="clip-path-202408-1500-4204-d9268812-a550-4cb6-bcc7-491efa9595a6">
+                                    <circle cx="50" cy="50" r="50"></circle>
+                                </clippath>
+                                <circle class="svg-fill-tertiary" cx="50" cy="50" r="50"></circle>
+                                <circle class="svg-fill-secondary svg-builder-circle" cx="50" cy="50" r="50"></circle>
+                                <g transform="translate(20.00, 20.00) scale(0.60, 0.60)">
+                                    <path class="svg-fill-primary" d="M74.7,28.3h-10.601c-2.209,0-4,1.791-4,4s1.791,4,4,4h10.601c1.709,0,3.1,1.391,3.1,3.1v31.8c0,1.709-1.391,3.1-3.1,3.1H25.3c-1.709,0-3.1-1.391-3.1-3.1v-31.8c0-1.709,1.391-3.1,3.1-3.1h10.6c2.209,0,4-1.791,4-4s-1.791-4-4-4h-10.6c-6.12,0-11.1,4.979-11.1,11.1v31.8c0,6.12,4.979,11.1,11.1,11.1h49.4c6.12,0,11.1-4.979,11.1-11.1v-31.8c0-6.121-4.979-11.1-11.1-11.1Z">
+                                    </path>
+                                    <path class="svg-fill-primary" d="M36.571,43.672c-1.562,1.562-1.562,4.095,0,5.657l10.597,10.596,.002,.003h0c.186,.186,.391,.352,.61,.498,.1,.067,.208,.112,.312,.169,.125,.068,.244,.143,.377,.198,.134,.055,.273,.087,.411,.128,.112,.033,.22,.076,.336,.099,.259,.051,.521,.079,.784,.079s.525-.028,.783-.079c.117-.023,.226-.067,.339-.101,.137-.04,.275-.072,.408-.127,.133-.055,.254-.131,.38-.2,.103-.056,.21-.101,.308-.167,.22-.147,.426-.314,.612-.501l10.597-10.597c1.562-1.562,1.562-4.095,0-5.657-1.561-1.562-4.096-1.562-5.656,0l-3.771,3.771V21.7c0-2.209-1.791-4-4-4s-4,1.791-4,4v25.743l-3.772-3.772c-1.562-1.562-4.094-1.562-5.657,0Z" opacity=".5">
+                                    </path>
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="together centre">
+                        <p>Quickload files:&nbsp;&nbsp;&nbsp;</p>
+                        <button id="Load" type="submit" {{ is_disabled }}>
+                            <svg class="svg-snoweb svg-theme-light svg-trigger" height="30" preserveaspectratio="xMidYMid meet" viewbox="0 0 100 100" width="30" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
+                                <clippath id="clip-path-202408-1501-2649-74807339-3fce-412c-b2db-9c1a011c2879">
+                                    <circle cx="50" cy="50" r="50"></circle>
+                                </clippath>
+                                <circle class="svg-fill-tertiary" cx="50" cy="50" r="50"></circle>
+                                <circle class="svg-fill-secondary svg-builder-circle" cx="50" cy="50" r="50"></circle>
+                                <g transform="translate(20.00, 20.00) scale(0.60, 0.60)">
+                                    <path class="svg-fill-primary" d="M32.355,67.902c-4.665,0-9.069-1.778-12.432-5.028-3.438-3.323-5.376-7.786-5.458-12.566-.125-7.301,4.201-13.825,10.673-16.683-.018-.312-.03-.623-.037-.934-.098-5.738,2.037-11.149,6.009-15.259,3.973-4.11,9.308-6.428,15.023-6.525,9.409-.132,17.573,5.71,20.568,14.33,10.444,1.203,18.707,10.051,18.892,20.896,.179,10.471-7.163,19.47-17.456,21.398-2.175,.408-4.261-1.023-4.668-3.195-.406-2.171,1.023-4.261,3.195-4.668,6.445-1.207,11.042-6.843,10.931-13.398-.126-7.387-6.28-13.289-13.626-13.17h-.369c-1.925,0-3.577-1.371-3.932-3.263-1.208-6.445-6.879-11.066-13.398-10.931-7.388,.125-13.296,6.238-13.17,13.626,.023,1.03,.135,2.089,.331,3.124,.405,2.14-.976,4.21-3.106,4.658-4.635,.976-7.94,5.121-7.859,9.857,.093,5.458,4.578,9.827,10.067,9.73,.023,0,.046,0,.07,0,2.177,0,3.961,1.746,3.998,3.932,.038,2.209-1.723,4.03-3.931,4.067-.104,.002-.209,.003-.313,.003Z" opacity=".5">
+                                    </path>
+                                    <path class="svg-fill-primary" d="M63.242,50.685l-10.4-10.5-.007-.006-.015-.015-.005-.006c-.039-.039-.085-.065-.125-.101-.147-.135-.297-.268-.463-.379l-.026-.017c-.1-.066-.208-.11-.311-.166-.117-.063-.227-.135-.351-.186l-.033-.014c-.126-.051-.258-.079-.387-.117l-.005-.002c-.107-.031-.209-.074-.32-.097l-.029-.005c-.124-.024-.25-.026-.375-.038-.127-.012-.253-.036-.381-.036h-.016c-.116,0-.23,.023-.345,.033-.138,.012-.275,.015-.411,.041l-.028,.005c-.104,.021-.199,.061-.299,.09l-.008,.003c-.136,.039-.273,.069-.405,.122l-.034,.014c-.116,.049-.221,.117-.331,.176-.11,.059-.224,.106-.329,.176l-.028,.018c-.157,.105-.296,.232-.436,.358-.049,.044-.104,.076-.151,.122l-.006,.007-.013,.013-.007,.006-10.4,10.5c-1.555,1.57-1.542,4.102,.027,5.657,.78,.772,1.797,1.158,2.815,1.158,1.03,0,2.06-.396,2.842-1.186l3.558-3.592v32.078c0,2.209,1.791,4,4,4s4-1.791,4-4V52.722l3.559,3.593c.782,.79,1.812,1.186,2.842,1.186,1.018,0,2.035-.386,2.814-1.158,1.57-1.555,1.582-4.087,.027-5.657Z">
+                                    </path>
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
+                </fieldset>
+            </form>
+            <div id="IfStored">
+                <br>
+                <form>
+                    <label for="select" class="form-label">Pick a graph to show</label>
+                    <input
+                        name="location"
+                        id="graphSelect"
+                        list="GraphOpts"
+                        class="disableAutoComplete"
+                        oninput="checkGraphInp()"
+                        style="width: 500px;"
+                    />
+                    <datalist id="GraphOpts"></datalist>
+                    <input type="button" onclick="graph(document.getElementById('graphSelect').value);" value="SHOW!" id="GraphConfirm" disabled>
+                </form>
+                <br>
             </div>
-            <div id="LocationsPlot"></div>
+            <div class="centre">
+                <div id="WeatherPlotArea">
+                    <button id="trainAIButton" type="button" onclick="alert('hi')" style="position: absolute;top: 0;left: 0;">Train<br>AI<br>here</button>
+                    <div id="myplot"></div>
+                </div>
+                <div id="LocationsPlot"></div>
+            </div>
+        </div>
+        <div class="Section">
+            <p>HI</p>
         </div>
     </div>
     <script type=text/javascript>

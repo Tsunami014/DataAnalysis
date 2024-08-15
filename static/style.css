@@ -2,6 +2,14 @@
     font-family: sans-serif;
 }
 
+#Main {
+    width: 80vw;
+    height: 80vh;
+    display: grid;
+    grid-template-columns: auto auto;
+    transform: translate(10vw, 10vh);
+}
+
 .vAlign * {
     vertical-align: middle;
 }
@@ -49,22 +57,13 @@ body > div:not(.bk-ToolTip) {
     user-select: none;
 }
 
-#centreSection {
-    --width:  80vw;
-    --height: 80vh;
+.Section {
     text-align: center;
     overflow-y: scroll;
     background: light-dark(lightgray, gray);
     border: solid light-dark(#333333aa, #aaaaaaaa);
     border-radius: 10px;
     padding: 5px;
-    width:  var(--width);
-    height: var(--height);
-    /* Put the topleft of the box in the centre and then move the box over half it's width and height to be perfectly centred! */
-    top:  50vh;
-    left: 50vw;
-    margin-left: calc(0px - var(--width ) / 2);
-    margin-top:  calc(0px - var(--height) / 2);
 }
 
 #WeatherPlotArea {
