@@ -15,7 +15,18 @@ function onload() {
     });
     loadingICO = document.getElementById("LoadingToCopy").innerHTML;
     updateCacheStatus();
+    updateTheme();
     load_BG();
+}
+
+function updateTheme() {
+    var cnt;
+    if (document.getElementById("themeSwitch").checked) {
+        cnt = "'☀'";
+    } else {
+        cnt = "'☾'";
+    }
+    document.getElementById("ThemeSwitchPar").children[1].style.setProperty('--content', cnt)
 }
 
 function toggleSide() {
