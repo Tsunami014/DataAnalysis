@@ -15,6 +15,23 @@ function onload() {
     load_BG();
 }
 
+function openSide() {
+    var side = document.getElementById('Side');
+    side.style.width = '0';
+    side.style.display = 'block';
+    setTimeout(function() {
+        side.style.width = '250px';
+    }, 10);
+}
+
+function closeSide() {
+    var side = document.getElementById('Side');
+    side.style.width = '0';
+    setTimeout(function() {
+        side.style.display = 'none';
+    }, 500);
+}
+
 function scrollDown() {
     setTimeout(function() {
         var area = document.getElementById('centreSection');

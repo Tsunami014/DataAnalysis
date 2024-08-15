@@ -11,6 +11,17 @@
     transform: translate(10vw, 10vh);
 }
 
+#Side {
+    width: 0px;
+    display: none;
+    transition: 0.5s;
+}
+
+.SideMenuButton {
+    font-size: 30px;
+    cursor: pointer;
+}
+
 .vAlign * {
     vertical-align: middle;
 }
