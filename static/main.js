@@ -114,6 +114,14 @@ function Download() {
     var thisLI = document.getElementById("downloadLoadingIco");
     thisLI.innerHTML = loadingICO;
     fetch('/quicksave/download').then(resp => {
+        if (!resp.ok) {
+            resp.json().then(function(data) {
+                Toast("Error downloading quick-save: "+data.toString(), 2);
+            }).catch(function() {
+                Toast("Error downloading quick-save: Unknown reason.", 2);
+            });
+            return;
+        }
         document.getElementById("Load").disabled = false;
         thisLI.innerHTML = "";
         ReleaseLock();
@@ -121,21 +129,37 @@ function Download() {
 }
 
 function loadLI() {
-    if (!UpdateLock("Loading quick-save")) {return true;}
+    if (!UpdateLock("Loading quick-save")) {return;}
     document.getElementById("loadLoadingIco").innerHTML = loadingICO;
-    return false;
+    fetch('/quicksave/upload').then(resp => {
+        if (!resp.ok) {
+            resp.json().then(function(data) {
+                Toast("Error restoring quick-save: "+data.toString(), 2);
+            }).catch(function() {
+                Toast("Error restoring quick-save: Unknown reason.", 2);
+            });
+            return;
+        }
+        ReleaseLock();
+    });
 }
 
 function file_status_check() {
     // send GET request to status URL
     fetch("status/get_data").then(resp => {
-        data = resp.json().then(function(data) {
+        resp.json().then(function(data) {
             var textarea = document.getElementById('FilesStatus');
             if ('txt' in data) {
                 document.getElementById('FilesStatus').innerHTML = data.txt;// + "&#13;&#10;";
                 textarea.scrollTop = textarea.scrollHeight;
             }
-            if (data.State != 'FINISHED' && data.state != 'ERROR') {
+            if (data.State == 'ERROR') {
+                document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>ERROR IN FILE HANDLING!";
+                document.getElementById('FilesStatus').innerHTML = data.Error.toString();
+                Toast("ERROR IN FILE PROCESSING! See file status panel for more info.", 2);
+                return;
+            }
+            if (data.State != 'FINISHED') {
                 setTimeout(file_status_check, 500);
             } else {
                 document.getElementById('FilesStatus').innerHTML = "Done!";
@@ -143,11 +167,11 @@ function file_status_check() {
                 document.getElementById("FilesInfo").innerHTML = "<b>Status: </b>FILES STORED :)";
                 document.getElementById('StoredStyle').innerHTML = "";
                 select = document.getElementById('GraphOpts');
-                select.innetHTML = "";
+                select.innerHTML = "";
                 fetch('/stations').then(resp => {
                     resp.json().then(function(data) {
-                        for (i in data) {
-                            for (j in data[i]) {
+                        for (let i in data) {
+                            for (let j in data[i]) {
                                 select.innerHTML += `<option value="${i}_${j.padStart(6, '0')}">${data[i][j].padStart(6, '0')}</option>`
                             }
                         }

@@ -28,7 +28,9 @@ def status(task_id):
     return flask.jsonify(statuses[task_id])
 
 @app.route('/quicksave/upload')
-def upload_file():
+def uploadData():
+    if not os.path.exists('theory/cache/savestate.pkl'):
+        return flask.jsonify({'ERROR': 'No quick-save found!'}), 404
     global files, statuses
     files = pickle.loads(open('theory/cache/savestate.pkl', 'rb').read())
     statuses['get_data'] = {"State": 'FINISHED', 'txt': 'Successfully loaded quick-save!'}
@@ -37,6 +39,8 @@ def upload_file():
 
 @app.route('/quicksave/download')
 def downloadData():
+    if files == {}:
+        return flask.jsonify({'ERROR': 'No data to save!'}), 404
     pickle.dump(files, open('theory/cache/savestate.pkl', 'wb+'))
     return flask.jsonify({})
 
