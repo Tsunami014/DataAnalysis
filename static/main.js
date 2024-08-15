@@ -15,20 +15,35 @@ function onload() {
     load_BG();
 }
 
+function toggleSide() {
+    var side = document.getElementById('Side');
+    if (side.classList.contains('closed')) {
+        openSide()
+    } else if (side.classList.contains('opened')) {
+        closeSide()
+    }
+}
+
 function openSide() {
     var side = document.getElementById('Side');
+    side.classList.remove('closed', 'opened');
     side.style.width = '0';
     side.style.display = 'block';
     setTimeout(function() {
         side.style.width = '250px';
+        setTimeout(function() {
+            side.classList.add('opened');
+        }, 500);
     }, 10);
 }
 
 function closeSide() {
     var side = document.getElementById('Side');
+    side.classList.remove('closed', 'opened');
     side.style.width = '0';
     setTimeout(function() {
         side.style.display = 'none';
+        side.classList.add('closed');
     }, 500);
 }
 

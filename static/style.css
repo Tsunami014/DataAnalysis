@@ -2,6 +2,12 @@
     font-family: sans-serif;
 }
 
+.topRight {
+    top: 5px;
+    right: 10px;
+    position: absolute !important;
+}
+
 #Main {
     width: 80vw;
     height: 80vh;
@@ -20,6 +26,14 @@
 .SideMenuButton {
     font-size: 30px;
     cursor: pointer;
+}
+
+#closeSideButton {
+    transition: 100ms;
+}
+
+div:not(.opened) > #closeSideButton {
+    opacity: 0;
 }
 
 .vAlign * {
@@ -101,12 +115,6 @@ body > div:not(.bk-ToolTip) {
 #LocationsPlot canvas.bk-layer {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
-}
-
-#topRight {
-    top: 5px;
-    right: 10px;
-    position: absolute;
 }
 
 .together {

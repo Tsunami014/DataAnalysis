@@ -18,7 +18,7 @@
 </head>
 <canvas id="game_canvas"></canvas>
 <body onload="onload();">
-    <div id="topRight">
+    <div class="topRight">
         <p class="unselectable" style="margin-bottom: 1px; margin-top: 5px;">Theme:</p>
         <div class="together">
             <p class="unselectable">Dark  </p>
@@ -28,7 +28,7 @@
             </label>
             <p class="unselectable">  Light</p>
         </div>
-        <span class="SideMenuButton" onclick="openSide()">&#9776;</span>
+        <span class="SideMenuButton unselectable" onclick="toggleSide()">&#9776;</span>
     </div>
     <div id="Main">
         <div class="Section">
@@ -154,8 +154,8 @@
                 <div id="LocationsPlot"></div>
             </div>
         </div>
-        <div id="Side" class="Section">
-            <a href="javascript:void(0)" class="SideMenuButton" onclick="closeSide()">&times;</a>
+        <div id="Side" class="Section closed unselectable">
+            <span id="closeSideButton" class="SideMenuButton topRight" onclick="closeSide()">&times;</span>
             <p>HI</p>
         </div>
     </div>
