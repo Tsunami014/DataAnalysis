@@ -13,10 +13,6 @@ from getWeather import (
     getAllNames
 )
 
-# TODO: Animate the ... on the loading screen
-# TODO: Show where *you* are currently on the map
-# TODO: Show where you are getting the data from on the map
-
 app = flask.Flask(__name__)
 
 @app.route('/favicon.ico')

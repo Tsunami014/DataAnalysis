@@ -10,7 +10,14 @@ If you cannot get the installation to work, try running
 pip install https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.11.0-py3-none-any.whl
 ```
 
-MAIN TODOS (More in `main.py`):
+## TODOS
  - [ ] Get data for EVERY place
  - [ ] Get more data (cloud coverage, maybe?)
  - [ ] Build the neural network
+ - [ ] Animate the ... on the loading panel
+ - [ ] Add a lot more of the spinning ...'s everywhere
+ - [ ] Round the edges of all the plots
+ - [ ] Show where *you* are currently on the map
+ - [ ] Show where you are getting the data from on the map
+
+And ***JEEZ*** TensorFlow SUCKS **SO MUCH**. Sorry for any extra pain.
