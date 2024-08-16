@@ -1,5 +1,6 @@
 from math import ceil
 import os
+from unittest import result
 import flask, json, pickle
 from asyncro import wrapper, statuses
 from bokeh.embed import json_item
@@ -184,6 +185,21 @@ def train_AI_long(update):
         update(txt=f"Training AI... {i*10}%", section=False)
         sleep(1)
     return {"txt": "AI trained!", "section": True}
+
+@app.route('/AI/plot')
+def plot_AI():
+    from bokeh.plotting import figure
+    ls = figure(title="Losses", x_axis_label='epochs', y_axis_label='losses')
+    ls.line([1, 2, 3, 4, 5], [0.1, 0.03, 0.001, 0.0003, 0.00004], line_width=2)
+    acc = figure(title="Accuracy", x_axis_label='days', y_axis_label='accuracy')
+    acc.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
+    res = figure(title="Results", x_axis_label='days', y_axis_label='results')
+    res.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
+    return json.dumps({
+        "losses": json_item(ls, "Losses"),
+        "accuracy": json_item(acc, "Accuracy"),
+        "results": json_item(res, "Results")
+    })
 
 @app.route('/')
 def main():

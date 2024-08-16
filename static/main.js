@@ -150,9 +150,14 @@ async function AI_status_check() {
     } else {
         textarea.innerHTML += "&#13;&#10;Done!";
         textarea.scrollTop = textarea.scrollHeight;
-        //var item = await (await fetch('/stations/plot')).json();
-        //Bokeh.embed.embed_item(item);
-        //scrollDown();
+        var items = await (await fetch('/AI/plot')).json();
+        for (let item of Object.entries(items)) {
+            Bokeh.embed.embed_item(item[1]);
+        }
+        setTimeout(function() {
+            var area = document.getElementById('Side');
+            area.scrollTop = area.scrollHeight;
+        }, 100);
         ReleaseLock();
     }
 }
