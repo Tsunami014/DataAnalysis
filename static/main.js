@@ -43,7 +43,7 @@ function Toast(text, type=0) {
             setTimeout(function() {
                 document.body.removeChild(toast);
             }, 500);
-        }, 3000);
+        }, 7000);
     }, 10);
 }
 
@@ -113,8 +113,40 @@ function scrollDown() {
 
 function trainAI() {
     if (!UpdateLock("Training AI")) {return;}
-    Toast("We tooooooootaly trained an AI in half a millisecond. Aren't we so cool?");
-    ReleaseLock();
+    fetch('/AI/train').then(resp => {
+        AI_status_check();
+    });
+}
+
+async function AI_status_check() {
+    // send GET request to status URL
+    var data = await (await fetch("status/train_AI")).json();
+    var textarea = document.getElementById('AIStatus');
+    if ('txt' in data) {
+        dots ++;
+        if (dots > 3) {
+            dots = 0;
+        }
+        var replacements = ["   ", ".  ", ".. ", "..."][dots];
+        // Can use [. ]{3}\\.* if one day we want to use regex
+        textarea.innerHTML += data.txt.replace("...", replacements) + "&#13;&#10;";
+        textarea.scrollTop = textarea.scrollHeight;
+    }
+    if (data.State == 'ERROR') {
+        textarea.innerHTML += "ERROR: "+data.Error.toString();
+        Toast("ERROR IN FILE PROCESSING! See file status panel for more info.", 2);
+        return;
+    }
+    if (data.State != 'FINISHED') {
+        setTimeout(AI_status_check, 500);
+    } else {
+        textarea.innerHTML += "Done!";
+        textarea.scrollTop = textarea.scrollHeight;
+        //var item = await (await fetch('/stations/plot')).json();
+        //Bokeh.embed.embed_item(item);
+        //scrollDown();
+        ReleaseLock();
+    }
 }
 
 function Download() {
@@ -150,6 +182,7 @@ function loadLI() {
         document.getElementById("Load").disabled = false;
         thisLI.innerHTML = "";
         ReleaseLock();
+        file_status_check();
     });
 }
 
@@ -188,7 +221,7 @@ async function file_status_check() {
                 select.innerHTML += `<option value="${i}_${j.padStart(6, '0')}">${data[i][j].padStart(6, '0')}</option>`
             }
         }
-        var item = (await fetch('/stations/plot')).json();
+        var item = await (await fetch('/stations/plot')).json();
         Bokeh.embed.embed_item(item);
         scrollDown();
         ReleaseLock();

@@ -32,7 +32,8 @@ def uploadData():
     if not os.path.exists('theory/cache/savestate.pkl'):
         return flask.jsonify({'ERROR': 'No quick-save found!'}), 404
     global files, statuses
-    files = pickle.loads(open('theory/cache/savestate.pkl', 'rb').read())
+    with open('theory/cache/savestate.pkl', 'rb') as f:
+        files = pickle.loads(f.read())
     statuses['get_data'] = {"State": 'FINISHED', 'txt': 'Successfully loaded quick-save!'}
     ## Return to the main page
     return flask.redirect('/')
@@ -41,7 +42,8 @@ def uploadData():
 def downloadData():
     if files == {}:
         return flask.jsonify({'ERROR': 'No data to save!'}), 404
-    pickle.dump(files, open('theory/cache/savestate.pkl', 'wb+'))
+    with open('theory/cache/savestate.pkl', 'wb+') as f:
+        pickle.dump(files, f)
     return flask.jsonify({})
 
 @wrapper
@@ -167,6 +169,19 @@ def plot(type, station):
         return flask.jsonify({'ERROR': 'Invalid type'}), 404
     
     return json.dumps(json_item(p, "myplot"))
+
+@app.route('/AI/train')
+def train_AI():
+    train_AI_long('train_AI')
+    return flask.jsonify({}), 202
+
+@wrapper
+def train_AI_long(update):
+    from time import sleep
+    for i in range(10):
+        update(txt=f"Training AI... {i*10}%")
+        sleep(1)
+    update(txt="AI trained!")
 
 @app.route('/')
 def main():
