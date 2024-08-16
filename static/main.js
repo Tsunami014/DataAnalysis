@@ -112,6 +112,7 @@ function scrollDown() {
 }
 
 function trainAI() {
+    document.getElementById('AIStatus').innerHTML = "&#13;&#10;";
     if (!UpdateLock("Training AI")) {return;}
     fetch('/AI/train').then(resp => {
         AI_status_check();
@@ -129,8 +130,15 @@ async function AI_status_check() {
         }
         var replacements = ["   ", ".  ", ".. ", "..."][dots];
         // Can use [. ]{3}\\.* if one day we want to use regex
-        textarea.innerHTML += data.txt.replace("...", replacements) + "&#13;&#10;";
-        textarea.scrollTop = textarea.scrollHeight;
+        if (data.section) {
+            if (!textarea.innerHTML.endsWith(data.txt + "\r\n")) {
+                textarea.innerHTML += data.txt + "&#13;&#10;";
+                textarea.scrollTop = textarea.scrollHeight;
+            }
+        } else {
+            textarea.innerHTML = data.txt.replace("...", replacements) + textarea.innerHTML.slice(textarea.innerHTML.indexOf("\n"));
+            textarea.scrollTop = 0;
+        }
     }
     if (data.State == 'ERROR') {
         textarea.innerHTML += "ERROR: "+data.Error.toString();
@@ -140,7 +148,7 @@ async function AI_status_check() {
     if (data.State != 'FINISHED') {
         setTimeout(AI_status_check, 500);
     } else {
-        textarea.innerHTML += "Done!";
+        textarea.innerHTML += "&#13;&#10;Done!";
         textarea.scrollTop = textarea.scrollHeight;
         //var item = await (await fetch('/stations/plot')).json();
         //Bokeh.embed.embed_item(item);

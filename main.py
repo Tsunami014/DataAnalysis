@@ -177,11 +177,13 @@ def train_AI():
 
 @wrapper
 def train_AI_long(update):
+    update(txt="Starting AI training...", section=True)
     from time import sleep
+    sleep(1)
     for i in range(10):
-        update(txt=f"Training AI... {i*10}%")
+        update(txt=f"Training AI... {i*10}%", section=False)
         sleep(1)
-    update(txt="AI trained!")
+    return {"txt": "AI trained!", "section": True}
 
 @app.route('/')
 def main():
