@@ -151,9 +151,9 @@ async function AI_status_check() {
         textarea.innerHTML += "&#13;&#10;Done!";
         textarea.scrollTop = textarea.scrollHeight;
         var items = await (await fetch('/AI/plot')).json();
-        for (let item of Object.entries(items)) {
-            Bokeh.embed.embed_item(item[1]);
-        }
+        Bokeh.embed.embed_item(items.INFO);
+        var predictionArea = document.getElementById('Predictions');
+        predictionArea.innerHTML = items.PREDICTIONS.text;
         setTimeout(function() {
             var area = document.getElementById('Side');
             area.scrollTop = area.scrollHeight;

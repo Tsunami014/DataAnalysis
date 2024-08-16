@@ -188,18 +188,16 @@ def train_AI_long(update):
 
 @app.route('/AI/plot')
 def plot_AI():
-    from bokeh.plotting import figure
-    ls = figure(title="Losses", x_axis_label='epochs', y_axis_label='losses')
+    from bokeh.plotting import figure, Row
+    size = {"width": 400, "height": 400}
+    ls = figure(title="Losses", x_axis_label='epochs', y_axis_label='losses', **size)
     ls.line([1, 2, 3, 4, 5], [0.1, 0.03, 0.001, 0.0003, 0.00004], line_width=2)
-    acc = figure(title="Accuracy", x_axis_label='days', y_axis_label='accuracy')
+    acc = figure(title="Accuracy", x_axis_label='days', y_axis_label='accuracy', **size)
     acc.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
-    res = figure(title="Results", x_axis_label='days', y_axis_label='results')
+    res = figure(title="Results", x_axis_label='days', y_axis_label='results', **size)
     res.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
-    return json.dumps({
-        "losses": json_item(ls, "Losses"),
-        "accuracy": json_item(acc, "Accuracy"),
-        "results": json_item(res, "Results")
-    })
+    return json.dumps({"INFO": json_item(Row(ls, acc, res, spacing=10), "AIInfo"),
+                       "PREDICTIONS": {"text": "The weather will be.........<br><b>SUNNY!!!</b>"}})
 
 @app.route('/')
 def main():
