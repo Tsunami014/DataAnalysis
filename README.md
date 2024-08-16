@@ -20,7 +20,7 @@ pip install https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-1.11.0-
  - [ ] Round the edges of all the plots
  - [ ] Rename 'store files' to 'File downloading and cleaning' to be more precise and clear
  - [x] **ERROR HANDLING**
- - [ ] Show where *you* are currently on the map
+ - [x] Show where *you* are currently on the map
  - [ ] Show where you are getting the data from on the map
 
 And ***JEEZ*** TensorFlow SUCKS **SO MUCH**. Sorry for any extra pain.

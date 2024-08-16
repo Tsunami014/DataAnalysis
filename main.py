@@ -11,7 +11,8 @@ from getWeather import (
     extractFiles, 
     CleanTemperatures, 
     CleanRainfall, 
-    getAllNames
+    getAllNames,
+    getMyLocation
 )
 
 app = flask.Flask(__name__)
@@ -117,6 +118,7 @@ def get_names():
 
 @app.route('/stations/plot')
 def plot_name_map():
+    import pandas as pd
     from numpy import pi, tan, log
     from bokeh.plotting import figure
     from bokeh.models import ColumnDataSource, HoverTool
@@ -140,10 +142,12 @@ def plot_name_map():
     locs['x'] = locs['Long'] * (k * pi/180.0)
     locs['y'] = log(tan((90 + locs['Lat']) * pi/360.0)) * k
 
-    p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]=="Temp & Rain"]), size=10, fill_color="yellow", fill_alpha=0.9)
+    p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]==""]), size=4, fill_color="white", fill_alpha=0.5)
     p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]=="Rain"]), size=8, fill_color="blue", fill_alpha=0.7)
     p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]=="Temp"]), size=8, fill_color="red", fill_alpha=0.7)
-    p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]==""]), size=4, fill_color="white", fill_alpha=0.5)
+    p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]=="Temp & Rain"]), size=10, fill_color="yellow", fill_alpha=0.9)
+    loc = getMyLocation()
+    p.scatter('x', 'y', source=ColumnDataSource(pd.DataFrame([{"x": loc[1] * (k * pi/180.0), "y": log(tan((90 + loc[0]) * pi/360.0)) * k, "Name": "Your location"}])), size=12, fill_color="purple", fill_alpha=0.9)
 
     # Add hover tool
     hover = HoverTool(tooltips=[("Location number", "@LocationStr"), ("Name", "@Name"), ("State", "@State"), ("Avaliable data", "@Avaliable")])
