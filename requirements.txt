@@ -5,7 +5,7 @@ bokeh
 matplotlib
 numpy
 unlzw3
-tensorflow<2.11
+tensorflow
 scikit-learn
 openmeteo-requests
 requests-cache
