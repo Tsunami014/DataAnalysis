@@ -2,7 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-from pickle import load
+from threading import Thread
+from io import StringIO
+from contextlib import redirect_stdout
 from random import randint
 from sklearn.preprocessing import MinMaxScaler
 from tensorflow.keras.models import Sequential
@@ -63,49 +65,44 @@ class AI:
             current_batch = np.append(current_batch[:,1:,:],[[current_pred]],axis=1)
         return forecast, closenesses
 
-# Get savestate
-with open('theory/cache/savestate.pkl', 'rb') as f:
-    files = load(f)
+def runAIonData(tempdf, update):
+    s = StringIO()
+    done = False
+    def runWhile():
+        from time import sleep
+        while not done:
+            update(txt=s.getvalue())
+            sleep(0.5)
+    t = Thread(target=runWhile, daemon=True)
+    t.start()
+    with redirect_stdout(s):
+        graphs = {}
+        df = pd.DataFrame(data=tempdf['MaxTemp'],columns=['Temp'])
+        # Split training and testing data
+        test_amount = 7
+        test_window = 1000
+        train_amount = len(df)-test_window
 
-while True:
-    place = files['Names'].loc[randint(0, len(files['Names']))]
-    if '0'*(6-len(str(place.Location)))+str(place.Location) in files['Temps']:
-        break
-# place = '27042'
+        train = df.iloc[:train_amount]
 
-tempdf = files['Temps']['0'*(6-len(str(place.Location)))+str(place.Location)]
-df = pd.DataFrame(data=tempdf['MaxTemp'],columns=['Temp'])
+        ai = AI()
 
+        ai.train(train, batch_size=20, length=30)
+        ai.model.summary()
 
-# Split training and testing data
-test_amount = 7
-test_window = 1000
-train_amount = len(df)-test_window
+        graphs['losses'] = ai.losses
 
-train = df.iloc[:train_amount]
+        offset = randint(0, test_window)
+        test = df.iloc[-test_amount-30-offset:-offset-test_amount].Temp.to_numpy().reshape(-1, 1)
+        real = df.iloc[-offset-test_amount:-offset].Temp.to_numpy().reshape(-1, 1)
 
-ai = AI()
+        forecast, closenesses = ai.predict(test, test_amount, real)
 
-ai.train(train, batch_size=20, length=30)
-ai.model.summary()
+        graphs['initial'] = test
+        graphs['forecast'] = list(test[-1])+[i[0] for i in forecast]
+        graphs['real'] = np.append(test[-1],real)
 
-ai.losses.plot()
-plt.show()
-
-offset = randint(0, test_window)
-test = df.iloc[-test_amount-30-offset:-offset-test_amount].Temp.to_numpy().reshape(-1, 1)
-real = df.iloc[-offset-test_amount:-offset].Temp.to_numpy().reshape(-1, 1)
-
-forecast, closenesses = ai.predict(test, test_amount, real)
-
-initial = test
-plt.plot(initial, 'r-', label='Input')
-x_axis = range(len(initial)-1, len(initial)+test_amount)
-plt.plot(x_axis, list(initial[-1])+[i[0] for i in forecast], 'b-', label='Predicted')
-plt.plot(x_axis, np.append(initial[-1],real), '--', color='orange', label='Actual')
-plt.legend()
-plt.ylim(ymin=0)
-plt.show()
-
-plt.plot(closenesses, 'b-')
-plt.show()
+        graphs['closenesses'] = closenesses
+    done = True
+    
+    return graphs

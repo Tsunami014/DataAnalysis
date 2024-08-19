@@ -1,5 +1,6 @@
 <head>
     <script src="{{url_for('static', filename='BG_Anxiety.js')}}"></script>
+    <script src="{{url_for('static', filename='ansi_up.js')}}"></script>
     <script src="{{url_for('static', filename='main.js')}}"></script>
     <link rel="stylesheet" href="{{url_for('static', filename='style.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='switch.css')}}">
@@ -167,7 +168,7 @@
             <div id="myplot" class="centre"></div>
             <button id="trainAIButton" type="button" onclick="trainAI();event.preventDefault();">Train AI on this data</button>
             <p>AI Training status:</p>
-            <textarea disabled id="AIStatus" style="resize: none;" cols='60' rows='4'>HAVEN'T STARTED, plz press da button</textarea><br>
+            <div id="AIStatus" class="unselectable">HAVEN'T STARTED, plz press da button</textarea><br>
             <div id="AIInfo"></div>
             <div id="Predictions"></div>
         </div>

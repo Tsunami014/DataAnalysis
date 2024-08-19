@@ -1,9 +1,9 @@
-from math import ceil
 import os
-from unittest import result
 import flask, json, pickle
+from math import ceil
 from asyncro import wrapper, statuses
 from bokeh.embed import json_item
+from AI import runAIonData
 from getWeather import (
     cached_status, 
     remove_cache, 
@@ -147,7 +147,8 @@ def plot_name_map():
     p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]=="Temp"]), size=8, fill_color="red", fill_alpha=0.7)
     p.scatter('x', 'y', source=ColumnDataSource(locs[locs["Avaliable"]=="Temp & Rain"]), size=10, fill_color="yellow", fill_alpha=0.9)
     loc = getMyLocation()
-    p.scatter('x', 'y', source=ColumnDataSource(pd.DataFrame([{"x": loc[1] * (k * pi/180.0), "y": log(tan((90 + loc[0]) * pi/360.0)) * k, "Name": "Your location"}])), size=12, fill_color="purple", fill_alpha=0.9)
+    if loc is not None:
+        p.scatter('x', 'y', source=ColumnDataSource(pd.DataFrame([{"x": loc[1] * (k * pi/180.0), "y": log(tan((90 + loc[0]) * pi/360.0)) * k, "Name": "Your location"}])), size=12, fill_color="purple", fill_alpha=0.9)
 
     # Add hover tool
     hover = HoverTool(tooltips=[("Location number", "@LocationStr"), ("Name", "@Name"), ("State", "@State"), ("Avaliable data", "@Avaliable")])
@@ -175,20 +176,14 @@ def plot(type, station):
     
     return json.dumps(json_item(p, "myplot"))
 
-@app.route('/AI/train')
-def train_AI():
-    train_AI_long('train_AI')
+@app.route('/AI/train/Temps/<station>')
+def train_AI(station):
+    train_AI_long('train_AI', files['Temps']['0'*(6-len(station))+station])
     return flask.jsonify({}), 202
 
 @wrapper
-def train_AI_long(update):
-    update(txt="Starting AI training...", section=True)
-    from time import sleep
-    sleep(1)
-    for i in range(10):
-        update(txt=f"Training AI... {i*10}%", section=False)
-        sleep(1)
-    return {"txt": "AI trained!", "section": True}
+def train_AI_long(update, data):
+    return runAIonData(data, update)
 
 @app.route('/AI/plot')
 def plot_AI():

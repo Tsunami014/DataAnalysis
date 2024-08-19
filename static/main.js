@@ -3,6 +3,7 @@ var lock = false;
 var lockDesc = "";
 var AITrained = "";
 var dots = 0;
+var currentDat = [null, -1];
 
 function onload() {
     document.getElementById("Cache").checked = true;
@@ -114,41 +115,41 @@ function scrollDown() {
 function trainAI() {
     document.getElementById('AIStatus').innerHTML = "&#13;&#10;";
     if (!UpdateLock("Training AI")) {return;}
-    fetch('/AI/train').then(resp => {
+    fetch('/AI/train/'+currentDat.join('/')).then(resp => {
         AI_status_check();
     });
 }
 
 async function AI_status_check() {
+    var ansi_up = new AnsiUp();
     // send GET request to status URL
     var data = await (await fetch("status/train_AI")).json();
     var textarea = document.getElementById('AIStatus');
     if ('txt' in data) {
-        dots ++;
-        if (dots > 3) {
-            dots = 0;
-        }
-        var replacements = ["   ", ".  ", ".. ", "..."][dots];
-        // Can use [. ]{3}\\.* if one day we want to use regex
-        if (data.section) {
-            if (!textarea.innerHTML.endsWith(data.txt + "\r\n")) {
-                textarea.innerHTML += data.txt + "&#13;&#10;";
-                textarea.scrollTop = textarea.scrollHeight;
+        var rows = data.txt.split(/[\n\r]/).filter((it, idx)=>{return it !== ""});
+        var out = "";
+        var finishedTraining = false;
+        for (let i = 0; i < rows.length; i++) {
+            if (rows[i].includes("Model")) {
+                finishedTraining = true;
             }
-        } else {
-            textarea.innerHTML = data.txt.replace("...", replacements) + textarea.innerHTML.slice(textarea.innerHTML.indexOf("\n"));
-            textarea.scrollTop = 0;
+            if (finishedTraining || !rows[i].includes("━") || rows[i].includes("Epoch") || !(i < rows.length-1 && rows[i+1].includes("━"))) {
+                out += ansi_up.ansi_to_html(rows[i]) + "<br>";
+            }
         }
+        textarea.innerHTML = out;
+        var sidebar = document.getElementById('Side');
+        sidebar.scrollTop = sidebar.scrollHeight;
     }
     if (data.State == 'ERROR') {
-        textarea.innerHTML += "ERROR: "+data.Error.toString();
+        textarea.innerHTML += "<p>ERROR: "+data.Error.toString()+"</p>";
         Toast("ERROR IN FILE PROCESSING! See file status panel for more info.", 2);
         return;
     }
     if (data.State != 'FINISHED') {
         setTimeout(AI_status_check, 500);
     } else {
-        textarea.innerHTML += "&#13;&#10;Done!";
+        textarea.innerHTML += "<p>Done!</p>";
         textarea.scrollTop = textarea.scrollHeight;
         var items = await (await fetch('/AI/plot')).json();
         Bokeh.embed.embed_item(items.INFO);
@@ -245,6 +246,7 @@ function graph(value) {
     fetch('/stations/plot/'+value.replace('_',"/"))
         .then(function(response) { return response.json(); })
         .then(function(item) {
+            currentDat = value.split('_');
             document.getElementById('myplot').innerHTML = "";
             Bokeh.embed.embed_item(item);
             openSide();
