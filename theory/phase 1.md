@@ -75,6 +75,3 @@ data, or solar power data. Pick one that interests you the most.
        - Show the model's prediction of the weather
        - Let user save model for ease of use again
       ```
-
-## IDEA
-What if I made a JavaScript version of this so I can host it on Github pages?
