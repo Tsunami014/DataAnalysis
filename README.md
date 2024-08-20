@@ -5,10 +5,13 @@ This is a flask web application which *currently* can show **some** rainfall and
 
 The goal for this project is to make a program that can predict the temperature and rainfall for a certain place
 
+And ***JEEZ*** TensorFlow SUCKS **<u>SO MUCH</u>**. Sorry for any extra pain. If some code errors on a line that includes the words `import` and `tensorflow` then please feel free to curse and swear at your computer because I have no clue how to fix that other than googling for ages trying multiple things then giving up just as something you *already* tried starts working. Once it took me half an hour to get something working. Hopefully that was just me being bad and you have a better time tho.
+
 ## TODOS
  - [ ] Get data for EVERY place
  - [ ] Get more data (cloud coverage, maybe?)
- - [ ] Build the neural network
+ - [x] Build the neural network
+ - [ ] Make a neural network for rainfall and minimum temperature data
  - [ ] Make sliders to adjust things for the neural network
  - [x] Animate the ... on the loading panel
  - [ ] Add a lot more of the spinning ...'s everywhere
@@ -17,5 +20,4 @@ The goal for this project is to make a program that can predict the temperature 
  - [x] **ERROR HANDLING**
  - [x] Show where *you* are currently on the map
  - [ ] Show where you are getting the data from on the map
-
-And ***JEEZ*** TensorFlow SUCKS **SO MUCH**. Sorry for any extra pain.
+ - [ ] Fix a *small* bug where the place it gets weather from is your current location instead of the actual location the AI is predicting from
