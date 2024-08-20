@@ -10,6 +10,7 @@ The goal for this project is to make a program that can predict the temperature 
  - If you cannot connect to the ftp site it may be because there's something funky on Windows where some security setting blocks the request. If that's an issue, try looking it up.
 
 ## TODOS
+ - [ ] Find the TOS for the FTP and API
  - [ ] Get data for EVERY place
  - [ ] Get more data (cloud coverage, maybe?)
  - [x] Build the neural network
