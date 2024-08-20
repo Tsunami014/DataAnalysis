@@ -113,8 +113,8 @@ function scrollDown() {
 }
 
 function trainAI() {
-    document.getElementById('AIStatus').innerHTML = "&#13;&#10;";
     if (!UpdateLock("Training AI")) {return;}
+    document.getElementById('AIStatus').innerHTML = "";
     fetch('/AI/train/'+currentDat.join('/')).then(resp => {
         AI_status_check();
     });
@@ -153,7 +153,8 @@ async function AI_status_check() {
         textarea.scrollTop = textarea.scrollHeight;
         var items = await (await fetch('/AI/plot')).json();
         Bokeh.embed.embed_item(items.INFO);
-        var predictionArea = document.getElementById('Predictions');
+        Bokeh.embed.embed_item(items.MAIN);
+        var predictionArea = document.getElementById('PredictionsTxt');
         predictionArea.innerHTML = items.PREDICTIONS.text;
         setTimeout(function() {
             var area = document.getElementById('Side');

@@ -12,7 +12,9 @@ from getWeather import (
     CleanTemperatures, 
     CleanRainfall, 
     getAllNames,
-    getMyLocation
+    getMyLocation,
+    getCurrentWeather,
+    cleanweather
 )
 
 app = flask.Flask(__name__)
@@ -22,6 +24,7 @@ def favicon():
     return flask.url_for('static', filename='favicon.ico')
 
 files = {}
+graphs = {}
 
 @app.route('/status/<task_id>')
 def status(task_id):
@@ -183,19 +186,31 @@ def train_AI(station):
 
 @wrapper
 def train_AI_long(update, data):
-    return runAIonData(data, update)
+    global graphs
+    update(txt="Getting current weather data...")
+    w = getCurrentWeather()
+    update(txt="Cleaning weather data...")
+    w = cleanweather(w)
+    graphs = runAIonData(data, update, w)
+    graphs['weather'] = w.to_dict('list')
+    graphs['weather']['date'] = [[i.day, i.month, i.year] for i in graphs['weather']['date']]
+    return graphs
 
 @app.route('/AI/plot')
 def plot_AI():
     from bokeh.plotting import figure, Row
     size = {"width": 400, "height": 400}
     ls = figure(title="Losses", x_axis_label='epochs', y_axis_label='losses', **size)
-    ls.line([1, 2, 3, 4, 5], [0.1, 0.03, 0.001, 0.0003, 0.00004], line_width=2)
+    ls.line(list(range(1, len(graphs['losses'])+1)), graphs['losses'], line_width=2)
     acc = figure(title="Accuracy", x_axis_label='days', y_axis_label='accuracy', **size)
-    acc.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
+    acc.line(list(range(1, len(graphs['closenesses'])+1)), graphs['closenesses'], line_width=2)
     res = figure(title="Results", x_axis_label='days', y_axis_label='results', **size)
-    res.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5], line_width=2)
+    res.line(list(range(1, len(graphs['initial'])+1)), [i[0] for i in graphs['initial']], legend_label="Initial", color="red", line_width=2)
+    il = len(graphs['initial'])
+    res.line(list(range(il, il+len(graphs['real']))), graphs['real'], legend_label="Actual", color="orange", line_width=2, line_dash="dashed")
+    res.line(list(range(il, il+len(graphs['forecast']))), graphs['forecast'], legend_label="Predicted", color="blue", line_width=2)
     return json.dumps({"INFO": json_item(Row(ls, acc, res, spacing=10), "AIInfo"),
+                       "MAIN": json_item(res, "PredictionGraph"),
                        "PREDICTIONS": {"text": "The weather will be.........<br><b>SUNNY!!!</b>"}})
 
 @app.route('/')

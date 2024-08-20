@@ -1,7 +1,8 @@
+import json
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 
+from datetime import datetime
 from threading import Thread
 from io import StringIO
 from contextlib import redirect_stdout
@@ -65,7 +66,7 @@ class AI:
             current_batch = np.append(current_batch[:,1:,:],[[current_pred]],axis=1)
         return forecast, closenesses
 
-def runAIonData(tempdf, update):
+def runAIonData(tempdf, update, weatherdf):
     s = StringIO()
     done = False
     def runWhile():
@@ -75,34 +76,38 @@ def runAIonData(tempdf, update):
             sleep(0.5)
     t = Thread(target=runWhile, daemon=True)
     t.start()
+
+    now = datetime.today()
+    nowidx = weatherdf.apply(lambda row: row.date.day==now.day and row.date.month==now.month and row.date.year==now.year, axis=1).tolist().index(True)
+
     with redirect_stdout(s):
         graphs = {}
         df = pd.DataFrame(data=tempdf['MaxTemp'],columns=['Temp'])
-        # Split training and testing data
-        test_amount = 7
-        test_window = 1000
-        train_amount = len(df)-test_window
+        test_amount = 7 # How much further to predict
+        length = 30 # How much previous input to provide
+        train_amount = len(df)
 
         train = df.iloc[:train_amount]
 
         ai = AI()
 
-        ai.train(train, batch_size=20, length=30)
+        ai.train(train, batch_size=20, length=length)
         ai.model.summary()
 
-        graphs['losses'] = ai.losses
+        lossesJSON = json.loads(ai.losses.to_json())['loss']
+        graphs['losses'] = [float(lossesJSON[i]) for i in lossesJSON]
 
-        offset = randint(0, test_window)
-        test = df.iloc[-test_amount-30-offset:-offset-test_amount].Temp.to_numpy().reshape(-1, 1)
-        real = df.iloc[-offset-test_amount:-offset].Temp.to_numpy().reshape(-1, 1)
+        test = weatherdf.iloc[nowidx-length:nowidx]['temperature_2m'].to_numpy().reshape(-1, 1)
+        real = weatherdf.iloc[nowidx:nowidx+test_amount]['temperature_2m'].to_numpy().reshape(-1, 1)
 
         forecast, closenesses = ai.predict(test, test_amount, real)
 
-        graphs['initial'] = test
-        graphs['forecast'] = list(test[-1])+[i[0] for i in forecast]
-        graphs['real'] = np.append(test[-1],real)
+        graphs['initial'] = test.tolist()
+        graphs['forecast'] = [float(test[-1])]+[float(i[0]) for i in forecast]
+        graphs['real'] = np.append(test[-1],real).tolist()
 
-        graphs['closenesses'] = closenesses
+        graphs['closenesses'] = [float(i[0]) for i in closenesses]
+        graphs['txt'] = s.getvalue() # To finish off the last of the outputs
     done = True
     
     return graphs

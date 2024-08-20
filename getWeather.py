@@ -2,14 +2,12 @@
 import ftplib, io, os, re, shutil
 import zipfile, tarfile
 import openmeteo_requests
-import geocoder
 import requests_cache
+import geocoder
 import pandas as pd
-import matplotlib.pyplot as plt
 from unlzw3 import unlzw
 from retry_requests import retry
 from io import StringIO
-from random import randint
 
 pd.options.mode.chained_assignment = None  # default='warn'
 # It gives a warning which I can do nothing about, so I must stop it warning me
@@ -157,7 +155,7 @@ def getAllNames(nms, nms2):
     locs.reset_index(drop=True, inplace=True)
     return locs
 
-# Other stuffs
+# phase3-3.ipynb but each cell is it's own function for importing
 
 def getMyLocation():
     g = geocoder.ip('me')
@@ -199,3 +197,7 @@ def getCurrentWeather():
 
     hourly_dataframe = pd.DataFrame(data = hourly_data)
     return hourly_dataframe
+
+def cleanweather(weatherdf):
+    newdf = weatherdf[weatherdf.apply(lambda row: row.date.hour==0, axis=1)]
+    return newdf.reset_index().drop('index', axis=1)

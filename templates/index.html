@@ -168,9 +168,12 @@
             <div id="myplot" class="centre"></div>
             <button id="trainAIButton" type="button" onclick="trainAI();event.preventDefault();">Train AI on this data</button>
             <p>AI Training status:</p>
-            <div id="AIStatus" class="unselectable">HAVEN'T STARTED, plz press da button</textarea><br>
+            <div id="AIStatus" class="unselectable">HAVEN'T STARTED, plz press da button</div><br>
             <div id="AIInfo"></div>
-            <div id="Predictions"></div>
+            <div id="Predictions">
+                <div id="PredictionGraph"></div>
+                <p id="PredictionsTxt"></p>
+            </div>
         </div>
     </div>
     <script type=text/javascript>
