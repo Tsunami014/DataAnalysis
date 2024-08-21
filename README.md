@@ -5,6 +5,11 @@ This is a flask web application which *currently* can show **some** rainfall and
 
 The goal for this project is to make a program that can predict the temperature and rainfall for a certain place
 
+## Video demonstration
+<video controls>
+  <source src="Data Analysis demo.mp4" type="video/mp4">
+</video>
+
 ## If something doesn't work
  - ***JEEZ*** TensorFlow SUCKS **<u>SO MUCH</u>**. Sorry for any extra pain. If some code errors on a line that includes the words `import` and `tensorflow` then please feel free to curse and swear at your computer because I have no clue how to fix that other than googling for ages trying multiple things then giving up just as something you *already* tried starts working. Once it took me half an hour to get something working. Hopefully that was just me being bad and you have a better time tho.
  - If you cannot connect to the ftp site it may be because there's something funky on Windows where some security setting blocks the request. If that's an issue, try looking it up.
