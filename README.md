@@ -6,7 +6,8 @@ This is a flask web application which *currently* can show **some** rainfall and
 The goal for this project is to make a program that can predict the temperature and rainfall for a certain place
 
 ## Video demonstration
-<video src="https://github.com/Tsunami014/DataAnalysis/raw/main/Data%20Analysis%20demo.mp4">
+
+https://github.com/Tsunami014/DataAnalysis/raw/main/Data%20Analysis%20demo.mp4
 </video>
 
 ## If something doesn't work
