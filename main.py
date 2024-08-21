@@ -209,7 +209,7 @@ def plot_AI():
     il = len(graphs['initial'])
     res.line(list(range(il, il+len(graphs['real']))), graphs['real'], legend_label="Actual", color="orange", line_width=2, line_dash="dashed")
     res.line(list(range(il, il+len(graphs['forecast']))), graphs['forecast'], legend_label="Predicted", color="blue", line_width=2)
-    return json.dumps({"INFO": json_item(Row(ls, acc, res, spacing=10), "AIInfo"),
+    return json.dumps({"INFO": json_item(Row(ls, acc, spacing=10), "AIInfo"),
                        "MAIN": json_item(res, "PredictionGraph"),
                        "PREDICTIONS": {"text": "The weather will be.........<br><b>SUNNY!!!</b>"}})
 
