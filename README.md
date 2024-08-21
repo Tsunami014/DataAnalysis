@@ -7,7 +7,7 @@ The goal for this project is to make a program that can predict the temperature 
 
 ## Video demonstration
 <video controls>
-  <source src="Data Analysis demo.mp4" type="video/mp4">
+  <source src="https://github.com/Tsunami014/DataAnalysis/raw/main/Data%20Analysis%20demo.mp4" type="video/mp4">
 </video>
 
 ## If something doesn't work
