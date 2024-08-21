@@ -15,6 +15,7 @@ The goal for this project is to make a program that can predict the temperature 
  - [ ] Get more data (cloud coverage, maybe?)
  - [x] Build the neural network
  - [ ] Make a neural network for rainfall and minimum temperature data
+ - [ ] Make NN predict a *slightly* more jagged line if possible (maybe by adjusting how many outputs it does at a tiem: e.g. instead of 30 in and 1 out, have 30 in and 7 out?)
  - [ ] Make sliders to adjust things for the neural network
  - [x] Animate the ... on the loading panel
  - [ ] Add a lot more of the spinning ...'s everywhere
