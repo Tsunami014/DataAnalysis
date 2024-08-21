@@ -7,7 +7,7 @@ The goal for this project is to make a program that can predict the temperature 
 
 ## Video demonstration
 
-https://github.com/Tsunami014/DataAnalysis/raw/main/Data%20Analysis%20demo.mp4
+https://github.com/user-attachments/assets/33dbac2b-e6b7-47ec-aecf-bcb08086761b
 
 ## If something doesn't work
  - ***JEEZ*** TensorFlow SUCKS **<u>SO MUCH</u>**. Sorry for any extra pain. If some code errors on a line that includes the words `import` and `tensorflow` then please feel free to curse and swear at your computer because I have no clue how to fix that other than googling for ages trying multiple things then giving up just as something you *already* tried starts working. Once it took me half an hour to get something working. Hopefully that was just me being bad and you have a better time tho.
