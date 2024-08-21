@@ -114,7 +114,9 @@ function scrollDown() {
 
 function trainAI() {
     if (!UpdateLock("Training AI")) {return;}
-    document.getElementById('AIStatus').innerHTML = "";
+    for (var elm in ['AIStatus', 'PredictionsTxt', 'PredictionGraph', 'AIInfo']) {
+        document.getElementById(elm).innerHTML = "";
+    }
     fetch('/AI/train/'+currentDat.join('/')).then(resp => {
         AI_status_check();
     });
